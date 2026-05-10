@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>给小犹太将军的专属小网页</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== 背景装饰 ===== -->
+  <div class="clouds">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+    <div class="cloud cloud-5"></div>
+  </div>
+  <div class="floating-stars">
+    <span class="star star-1">✦</span><span class="star star-2">✧</span>
+    <span class="star star-3">✦</span><span class="star star-4">✧</span>
+    <span class="star star-5">✦</span><span class="star star-6">✧</span>
+    <span class="star star-7">✦</span><span class="star star-8">✧</span>
+    <span class="star star-9">✦</span><span class="star star-10">✧</span>
+    <span class="star star-11">✦</span><span class="star star-12">✧</span>
+  </div>
+
+  <!-- ===== 导航标签栏 ===== -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="home">🏠 首页</button>
+    <button class="tab-btn" data-tab="whispers">💌 悄悄话</button>
+    <button class="tab-btn" data-tab="interact">🎮 小互动</button>
+    <button class="tab-btn" data-tab="surprise">💝 惊喜盒</button>
+  </nav>
+
+  <!-- 音乐播放器 -->
+  <div class="music-player" id="music-player">
+    <button id="music-toggle" class="music-btn" title="播放背景音乐">🎵</button>
+  </div>
+
+  <!-- ======================== 首页 ======================== -->
+  <section class="tab-panel active" id="panel-home">
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-glow-ring">
+        <div class="glow-orbit orbit-1"></div>
+        <div class="glow-orbit orbit-2"></div>
+        <div class="glow-orbit orbit-3"></div>
+      </div>
+      <div class="hero-badge">
+        <span class="badge-star left">💫</span>
+        <span class="badge-star right">💫</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-line line-1">给小犹太将军的</span>
+        <span class="title-line line-2">专属小网页</span>
+      </h1>
+      <p class="hero-subtitle">✨ 星星女士的可爱宇宙 ✨</p>
+      <div class="hero-decoration">
+        <span class="deco-star">🌟</span>
+        <span class="deco-heart">💕</span>
+        <span class="deco-star">🌟</span>
+        <span class="deco-sparkle">✧</span>
+      </div>
+    </header>
+
+    <!-- 日期计数器 — 圆形徽章 -->
+    <section class="counter-section">
+      <div class="counter-badge">
+        <div class="counter-ring">
+          <svg viewBox="0 0 200 200" class="counter-svg">
+            <defs>
+              <linearGradient id="gradPink" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f48fb1" />
+                <stop offset="100%" stop-color="#ce93d8" />
+              </linearGradient>
+            </defs>
+            <circle cx="100" cy="100" r="90" class="counter-circle-bg" />
+            <circle cx="100" cy="100" r="90" class="counter-circle-fg" id="counter-circle-fg" />
+          </svg>
+          <div class="counter-stars-orbit" id="counter-stars-orbit">
+            <span>⭐</span><span>✨</span><span>💫</span><span>🌟</span>
+            <span>⭐</span><span>✨</span><span>💫</span><span>🌟</span>
+          </div>
+        </div>
+        <div class="counter-inner">
+          <span class="counter-emoji">💗</span>
+          <p class="counter-label">我们已经在一起</p>
+          <div class="counter-digits">
+            <span id="day-count">0</span>
+          </div>
+          <p class="counter-unit">天</p>
+          <p class="counter-sub">每一天都是甜甜的小宇宙 ✨</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 波浪分隔 -->
+    <div class="section-divider">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,30 C200,0 400,60 600,30 C800,0 1000,60 1200,30 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.3)"/>
+        <path d="M0,35 C200,10 400,55 600,35 C800,15 1000,55 1200,35 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+      <span class="divider-icon">💖</span>
+    </div>
+
+    <!-- 昵称卡片 — 每张不同风格 -->
+    <section class="nickname-section">
+      <h2 class="section-title">💖 她的专属昵称 💖</h2>
+      <div class="nickname-grid">
+        <div class="nickname-card card-crown">
+          <div class="nc-glow"></div>
+          <span class="card-emoji">👑</span>
+          <h3>小犹太将军</h3>
+          <p>统帅全宇宙可爱事物的最高指挥官</p>
+          <span class="nc-tag">Commander</span>
+        </div>
+        <div class="nickname-card card-star">
+          <div class="nc-glow"></div>
+          <span class="card-emoji">⭐</span>
+          <h3>星星女士</h3>
+          <p>夜空里最温柔的那一颗光芒</p>
+          <span class="nc-tag">Starlight</span>
+        </div>
+        <div class="nickname-card card-ribbon">
+          <div class="nc-glow"></div>
+          <span class="card-emoji">🎀</span>
+          <h3>小将军</h3>
+          <p>虽然叫将军但可爱系数突破天际</p>
+          <span class="nc-tag">Cutie</span>
+        </div>
+        <div class="nickname-card card-sparkle">
+          <div class="nc-glow"></div>
+          <span class="card-emoji">✨</span>
+          <h3>宇宙最闪亮的小星星</h3>
+          <p>整个银河系因为你才有了光亮</p>
+          <span class="nc-tag">Brightest</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 波浪分隔 -->
+    <div class="section-divider flip">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.3)"/>
+        <path d="M0,35 C200,55 400,5 600,35 C800,55 1000,5 1200,35 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+      <span class="divider-icon">📷</span>
+    </div>
+
+    <!-- 照片墙 — Bento Grid + 拍立得 -->
+    <section class="photo-section">
+      <h2 class="section-title">📷 星星相册 📷</h2>
+      <div class="bento-grid" id="bento-grid">
+        <!-- JS 动态生成 bento 布局 -->
+      </div>
+    </section>
+
+    <!-- 波浪分隔 -->
+    <div class="section-divider">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,30 C200,0 400,60 600,30 C800,0 1000,60 1200,30 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.3)"/>
+        <path d="M0,35 C200,10 400,55 600,35 C800,15 1000,55 1200,35 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+      <span class="divider-icon">🌸</span>
+    </div>
+
+    <!-- 今日夸夸 -->
+    <section class="compliment-section">
+      <h2 class="section-title">🌸 今日夸夸 🌸</h2>
+      <div class="glass-card compliment-card">
+        <div class="compliment-sparkles">
+          <span class="cs c1">✨</span><span class="cs c2">💫</span><span class="cs c3">⭐</span><span class="cs c4">✨</span>
+        </div>
+        <p id="compliment-text" class="compliment-text">点击下面的按钮，来一句甜甜的夸奖吧~</p>
+        <button id="compliment-btn" class="compliment-btn">
+          <span>💝</span> 夸夸她 <span>💝</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 留言卡片 — 交错布局 -->
+    <section class="message-section">
+      <h2 class="section-title">💌 温柔的小话 💌</h2>
+      <div class="message-grid">
+        <div class="glass-card message-card msg-left">
+          <span class="msg-icon">💗</span>
+          <p>你笑起来的时候，我的世界就全亮了。</p>
+        </div>
+        <div class="glass-card message-card msg-right">
+          <span class="msg-icon">💫</span>
+          <p>星星不需要追月亮，因为星星自己就在发光。</p>
+        </div>
+        <div class="glass-card message-card msg-left">
+          <span class="msg-icon">💖</span>
+          <p>每一天都因为有你而变得特别可爱。</p>
+        </div>
+        <div class="glass-card message-card msg-right">
+          <span class="msg-icon">🎀</span>
+          <p>你是宇宙送给这个世界最甜的礼物。</p>
+        </div>
+      </div>
+      <!-- 下方的装饰星星列 -->
+      <div class="message-stars">
+        <span>⭐</span><span>✨</span><span>💫</span><span>🌟</span><span>⭐</span>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ======================== 悄悄话 ======================== -->
+  <section class="tab-panel" id="panel-whispers">
+
+    <header class="hero">
+      <h1 class="hero-title">💌 悄悄话</h1>
+      <p class="hero-subtitle">只给星星女士看的秘密</p>
+    </header>
+
+    <!-- 信封情书 -->
+    <section class="envelope-section">
+      <h2 class="section-title">✉️ 有一封信要给你 ✉️</h2>
+      <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="envelope" id="envelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-body">
+            <span class="envelope-seal">💝</span>
+          </div>
+          <div class="envelope-letter" id="envelope-letter">
+            <p>亲爱的星星女士：</p>
+            <p>当你打开这封信的时候，全宇宙的花都开了。</p>
+            <p>谢谢你做我的小星星，在每个平凡的日子里闪闪发光。</p>
+            <p>不管今天天气怎么样，你的笑容就是最好的天气。</p>
+            <p>愿你的每一天都有小确幸，每一晚都有甜甜的梦。</p>
+            <p>—— 永远喜欢你的我 💗</p>
+          </div>
+        </div>
+        <p class="envelope-hint">👆 点击信封打开</p>
+      </div>
+    </section>
+
+    <!-- 纸条墙 -->
+    <section class="notes-section">
+      <h2 class="section-title">📝 纸条墙 📝</h2>
+      <div class="notes-wall" id="notes-wall">
+        <div class="sticky-note note-1">
+          <span class="note-pin">📌</span>
+          <p>今天早餐记得吃哦，不要饿肚子~ 🥐</p>
+        </div>
+        <div class="sticky-note note-2">
+          <span class="note-pin">📌</span>
+          <p>下班路上看到一朵云长得像你，可爱！☁️</p>
+        </div>
+        <div class="sticky-note note-3">
+          <span class="note-pin">📌</span>
+          <p>天冷了要加衣服，小将军也不能感冒。🧣</p>
+        </div>
+        <div class="sticky-note note-4">
+          <span class="note-pin">📌</span>
+          <p>你昨天说的那句话我记在心里了。💗</p>
+        </div>
+        <div class="sticky-note note-5">
+          <span class="note-pin">📌</span>
+          <p>周末带你去看星星好不好？✨</p>
+        </div>
+        <div class="sticky-note note-6">
+          <span class="note-pin">📌</span>
+          <p>世界上所有的甜加起来都没你甜。🍯</p>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ======================== 小互动 ======================== -->
+  <section class="tab-panel" id="panel-interact">
+
+    <header class="hero">
+      <h1 class="hero-title">🎮 小互动</h1>
+      <p class="hero-subtitle">来玩点可爱的小游戏吧</p>
+    </header>
+
+    <!-- 默契大考验 -->
+    <section class="quiz-section">
+      <h2 class="section-title">💡 默契大考验 💡</h2>
+      <div class="glass-card quiz-card" id="quiz-card">
+        <div id="quiz-content">
+          <p id="quiz-question" class="quiz-question">点击开始，看看你有多了解她~</p>
+          <div id="quiz-options" class="quiz-options"></div>
+        </div>
+        <div id="quiz-result" class="quiz-result hidden">
+          <span class="quiz-result-emoji"></span>
+          <p class="quiz-result-text"></p>
+          <div class="quiz-score" id="quiz-score-bar">
+            <div class="quiz-score-fill"></div>
+          </div>
+          <p class="quiz-score-text"></p>
+        </div>
+        <button id="quiz-btn" class="compliment-btn">开始答题</button>
+      </div>
+    </section>
+
+    <!-- 心情日记 -->
+    <section class="mood-section">
+      <h2 class="section-title">😊 今日心情日记 😊</h2>
+      <div class="glass-card mood-card">
+        <p class="mood-prompt">星星女士今天的心情是？</p>
+        <div class="mood-emojis" id="mood-emojis">
+          <button class="mood-btn" data-mood="开心">😊<span>开心</span></button>
+          <button class="mood-btn" data-mood="幸福">🥰<span>幸福</span></button>
+          <button class="mood-btn" data-mood="元气">🤩<span>元气</span></button>
+          <button class="mood-btn" data-mood="慵懒">😴<span>慵懒</span></button>
+          <button class="mood-btn" data-mood="甜蜜">😍<span>甜蜜</span></button>
+        </div>
+        <p id="mood-result" class="mood-result"></p>
+        <div id="mood-history" class="mood-history"></div>
+      </div>
+    </section>
+
+    <!-- 许愿瓶 -->
+    <section class="wish-section">
+      <h2 class="section-title">🫧 许愿瓶 🫧</h2>
+      <div class="glass-card wish-card">
+        <div class="wish-bottle" id="wish-bottle">
+          <div class="bottle-stars" id="bottle-stars">
+            <span>⭐</span><span>✨</span><span>💫</span>
+            <span>🌟</span><span>⭐</span><span>✨</span>
+          </div>
+          <div class="bottle-body"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-cork"></div>
+        </div>
+        <div class="wish-input-area">
+          <input type="text" id="wish-input" class="wish-input" placeholder="写下一个小愿望..." maxlength="30">
+          <button id="wish-btn" class="compliment-btn">✨ 放进许愿瓶</button>
+        </div>
+        <p id="wish-count" class="wish-count">瓶子里有 <span>6</span> 颗小星星</p>
+        <div id="wish-list" class="wish-list"></div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ======================== 惊喜盒 ======================== -->
+  <section class="tab-panel" id="panel-surprise">
+
+    <header class="hero">
+      <h1 class="hero-title">💝 惊喜盒</h1>
+      <p class="hero-subtitle">这里藏着给你的小心意</p>
+    </header>
+
+    <!-- 礼物盒 -->
+    <section class="gift-section">
+      <h2 class="section-title">🎁 拆礼物时间 🎁</h2>
+      <div class="glass-card gift-card">
+        <div class="gift-box-wrapper" id="gift-box-wrapper">
+          <div class="gift-box" id="gift-box">
+            <div class="gift-lid" id="gift-lid">
+              <span class="gift-ribbon">🎀</span>
+            </div>
+            <div class="gift-body">
+              <span class="gift-tag">TO: 星星女士</span>
+            </div>
+          </div>
+          <p class="gift-hint">👆 点击礼物拆开看看</p>
+        </div>
+        <div id="gift-surprise" class="gift-surprise hidden">
+          <span class="gift-surprise-emoji">💝</span>
+          <p class="gift-surprise-text" id="gift-surprise-text"></p>
+        </div>
+        <button id="gift-reset-btn" class="compliment-btn hidden">🎀 重新包装</button>
+      </div>
+      <!-- 星星雨容器 -->
+      <div id="star-rain" class="star-rain"></div>
+    </section>
+
+    <!-- 幸运签 -->
+    <section class="fortune-section">
+      <h2 class="section-title">🏮 今日幸运签 🏮</h2>
+      <div class="glass-card fortune-card">
+        <div class="fortune-slip" id="fortune-slip">
+          <div class="fortune-front">
+            <span class="fortune-icon">🏮</span>
+            <p>点击抽取一支幸运签</p>
+          </div>
+          <div class="fortune-back" id="fortune-back">
+            <span class="fortune-type" id="fortune-type"></span>
+            <p class="fortune-msg" id="fortune-msg"></p>
+            <span class="fortune-deco">✨</span>
+          </div>
+        </div>
+        <button id="fortune-btn" class="compliment-btn">🎋 抽一支签</button>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ===== 底部 ===== -->
+  <footer class="footer">
+    <div class="footer-heart">💓</div>
+    <p>愿星星女士每天都开心。</p>
+    <p class="footer-note">Made with 💗 + ✨ + 🎀</p>
+  </footer>
+
+  <!-- 回到顶部 -->
+  <button id="back-to-top" class="back-to-top hidden" title="回到顶部">⬆</button>
+
+  <!-- 照片灯箱 -->
+  <div id="lightbox" class="lightbox hidden">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <button class="lightbox-prev" id="lightbox-prev">&#10094;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-next" id="lightbox-next">&#10095;</button>
+  </div>
+
+  <!-- 点击特效 -->
+  <div id="click-effects" class="click-effects"></div>
+
+  <!-- 背景音乐 -->
+  <audio id="bgm" loop preload="none">
+    <source src="assets/audio/bgm.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
