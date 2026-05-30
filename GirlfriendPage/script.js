@@ -1086,6 +1086,59 @@ const START_DATE = new Date('2020-02-26');
   });
 })();
 
+// ===== 全局 Lucky 挂件拖拽 =====
+(function initLuckyPendant() {
+  const pendant = document.getElementById('lucky-pendant');
+  if (!pendant) return;
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let originX = 0;
+  let originY = 0;
+
+  const saved = JSON.parse(localStorage.getItem('lucky_pendant_position') || 'null');
+  if (saved && Number.isFinite(saved.x) && Number.isFinite(saved.y)) {
+    pendant.style.left = saved.x + 'px';
+    pendant.style.top = saved.y + 'px';
+    pendant.style.right = 'auto';
+  }
+
+  pendant.addEventListener('pointerdown', e => {
+    dragging = true;
+    pendant.classList.add('dragging');
+    pendant.setPointerCapture?.(e.pointerId);
+    const rect = pendant.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    originX = rect.left;
+    originY = rect.top;
+    pendant.style.left = originX + 'px';
+    pendant.style.top = originY + 'px';
+    pendant.style.right = 'auto';
+  });
+
+  pendant.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const maxX = window.innerWidth - pendant.offsetWidth;
+    const maxY = window.innerHeight - pendant.offsetHeight;
+    const nextX = Math.min(Math.max(0, originX + e.clientX - startX), maxX);
+    const nextY = Math.min(Math.max(0, originY + e.clientY - startY), maxY);
+    pendant.style.left = nextX + 'px';
+    pendant.style.top = nextY + 'px';
+  });
+
+  function stopDrag() {
+    if (!dragging) return;
+    dragging = false;
+    pendant.classList.remove('dragging');
+    const rect = pendant.getBoundingClientRect();
+    localStorage.setItem('lucky_pendant_position', JSON.stringify({ x: rect.left, y: rect.top }));
+  }
+
+  pendant.addEventListener('pointerup', stopDrag);
+  pendant.addEventListener('pointercancel', stopDrag);
+})();
+
 // ===== 鼠标点击特效 =====
 (function initClickEffects() {
   const container = document.getElementById('click-effects');
@@ -1094,7 +1147,7 @@ const START_DATE = new Date('2020-02-26');
 
   document.addEventListener('click', e => {
     // 排除交互元素
-    if (e.target.closest('button, input, select, .envelope, .envelope-backdrop, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet')) return;
+    if (e.target.closest('button, input, select, .envelope, .envelope-backdrop, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet, #lucky-pendant')) return;
     const el = document.createElement('span');
     el.className = 'click-effect';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];

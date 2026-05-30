@@ -113,6 +113,30 @@
       </div>
     </section>
 
+    <!-- 手绘家的小场景 -->
+    <section class="home-scene-section" aria-labelledby="home-scene-title">
+      <h2 class="section-title" id="home-scene-title">🖍️ 我们的小小客厅 🖍️</h2>
+      <div class="glass-card handdrawn-scene-card">
+        <div class="handdrawn-scene" aria-label="手绘风客厅：阳光、沙发、两个人和 Lucky">
+          <div class="scene-sun"></div>
+          <div class="scene-cloud cloud-a"></div>
+          <div class="scene-cloud cloud-b"></div>
+          <div class="scene-window"><span></span><span></span><span></span></div>
+          <div class="scene-shelf">
+            <span class="scene-bottle b1"></span><span class="scene-bottle b2"></span><span class="scene-bottle b3"></span>
+            <span class="scene-bear bear-1"></span><span class="scene-bear bear-2"></span><span class="scene-bear bear-3"></span>
+          </div>
+          <div class="scene-sofa"></div>
+          <div class="scene-person person-boy"><span class="person-head"></span><span class="person-body"></span><span class="person-leg l1"></span><span class="person-leg l2"></span></div>
+          <div class="scene-person person-girl"><span class="person-head"></span><span class="person-hair"></span><span class="person-body"></span><span class="person-leg l1"></span><span class="person-leg l2"></span></div>
+          <div class="scene-rug"></div>
+          <div class="scene-table"><span></span><span></span></div>
+          <div class="scene-lucky"><span class="scene-lucky-ear e1"></span><span class="scene-lucky-ear e2"></span><span class="scene-lucky-body"></span><span class="scene-lucky-tail"></span></div>
+        </div>
+        <p class="scene-caption">把你画的温暖小家放进首页：有阳光、沙发、我们和摇尾巴的 Lucky。</p>
+      </div>
+    </section>
+
     <!-- 波浪分隔 -->
     <div class="section-divider">
       <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
@@ -549,7 +573,7 @@
     <section class="dog-section">
       <div class="glass-card dog-card">
         <div class="dog-scene" id="dog-scene" aria-label="Lucky Q版小宠物">
-          <div class="dog-pet westie westie-reference" id="dog-pet">
+          <div class="dog-pet westie westie-reference side-westie" id="dog-pet">
             <div class="westie-ear westie-ear-left"><span></span></div>
             <div class="westie-ear westie-ear-right"><span></span></div>
             <div class="westie-head">
@@ -623,6 +647,21 @@
     <button class="lightbox-prev" id="lightbox-prev">&#10094;</button>
     <img id="lightbox-img" src="" alt="">
     <button class="lightbox-next" id="lightbox-next">&#10095;</button>
+  </div>
+
+  <!-- 全局可拖动 Lucky 挂件 -->
+  <div id="lucky-pendant" class="lucky-pendant" role="button" tabindex="0" aria-label="可拖动的 Lucky 西高地挂件">
+    <div class="pendant-string"></div>
+    <div class="pendant-westie">
+      <span class="pendant-ear front"></span>
+      <span class="pendant-ear back"></span>
+      <span class="pendant-head"></span>
+      <span class="pendant-body"></span>
+      <span class="pendant-tail"></span>
+      <span class="pendant-leg leg-a"></span>
+      <span class="pendant-leg leg-b"></span>
+    </div>
+    <span class="pendant-label">Lucky</span>
   </div>
 
   <!-- 点击特效 -->
