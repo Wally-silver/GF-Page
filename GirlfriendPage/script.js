@@ -1,5 +1,5 @@
-// ===== 配置：在一起的第一天 =====
-const START_DATE = new Date('2026-03-26');
+// ===== 配置：相识的第一天 =====
+const START_DATE = new Date('2020-02-26');
 
 // ===== Tab 切换 =====
 (function initTabs() {
@@ -42,15 +42,18 @@ const START_DATE = new Date('2026-03-26');
   setInterval(update, 60 * 1000);
 })();
 
-// ===== 照片墙 — Bento Grid + 拍立得 + 灯箱 =====
+// ===== 绝世美颜照片集合：点击组件后打开 =====
 (function initPhotos() {
+  const cover = document.getElementById('beauty-cover');
+  const modal = document.getElementById('beauty-modal');
   const grid = document.getElementById('bento-grid');
+  const modalClose = document.getElementById('beauty-modal-close');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lbClose = document.getElementById('lightbox-close');
   const lbPrev = document.getElementById('lightbox-prev');
   const lbNext = document.getElementById('lightbox-next');
-  if (!grid) return;
+  if (!grid || !modal || !cover) return;
 
   const total = 9;
   let currentIndex = 0;
@@ -64,6 +67,7 @@ const START_DATE = new Date('2026-03-26');
     ['bento-w1',    'bento-tilt-l',  '🎀 可爱暴击'],
     ['bento-w2',    'bento-tilt-r',  '🌸 花与笑'],
     ['bento-w1',    'bento-tilt-l2', '💖 记在心里'],
+    ['bento-w1',    'bento-tilt-r2', '☁️ 心动云朵'],
   ];
 
   for (let i = 1; i <= Math.min(total, bentoLayout.length); i++) {
@@ -80,6 +84,19 @@ const START_DATE = new Date('2026-03-26');
     grid.appendChild(frame);
   }
 
+  cover.addEventListener('click', openBeautyModal);
+  modalClose?.addEventListener('click', closeBeautyModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeBeautyModal(); });
+
+  function openBeautyModal() {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeBeautyModal() {
+    modal.classList.add('hidden');
+    if (lightbox?.classList.contains('hidden')) document.body.style.overflow = '';
+  }
+
   function openLightbox(idx) {
     currentIndex = idx;
     lightboxImg.src = 'assets/images/photo' + (idx + 1) + '.jpg';
@@ -88,7 +105,7 @@ const START_DATE = new Date('2026-03-26');
   }
   function closeLightbox() {
     lightbox.classList.add('hidden');
-    document.body.style.overflow = '';
+    if (modal.classList.contains('hidden')) document.body.style.overflow = '';
   }
   function prev() { currentIndex = (currentIndex - 1 + total) % total; lightboxImg.src = 'assets/images/photo' + (currentIndex + 1) + '.jpg'; }
   function next() { currentIndex = (currentIndex + 1) % total; lightboxImg.src = 'assets/images/photo' + (currentIndex + 1) + '.jpg'; }
@@ -98,8 +115,11 @@ const START_DATE = new Date('2026-03-26');
   lbNext.addEventListener('click', next);
   lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (!lightbox.classList.contains('hidden')) closeLightbox();
+      else if (!modal.classList.contains('hidden')) closeBeautyModal();
+    }
     if (lightbox.classList.contains('hidden')) return;
-    if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') prev();
     if (e.key === 'ArrowRight') next();
   });
@@ -110,7 +130,7 @@ const START_DATE = new Date('2026-03-26');
   const compliments = [
     '你今天一定是宇宙里最可爱的女孩子！🌟',
     '看到星星女士，全世界的花都开了。🌸',
-    '小将军笑起来的时候，连阳光都变得更温柔了。☀️',
+    '绵绵小宝笑起来的时候，连阳光都变得更温柔了。☀️',
     '你是整个银河系里最闪闪发光的存在！✨',
     '星星女士的眼睛里有整个星空，好美。🌌',
     '小犹太将军今天一定又是可爱满分的一天！💯',
@@ -118,7 +138,7 @@ const START_DATE = new Date('2026-03-26');
     '宇宙那么大，但你才是最耀眼的那颗星。⭐',
     '今天的你也超级无敌可爱，不接受反驳！🎀',
     '星星女士的笑容是世界上最甜的糖果。🍬',
-    '小将军的可爱能量，今天也充满格了！🔋',
+    '绵绵小宝的可爱能量，今天也充满格了！🔋',
     '你一定是上天派来治愈这个世界的小天使。👼',
     '每次看到星星女士，心情都会自动变好。💖',
     '全宇宙最温柔最可爱的人就是你啦！💝',
@@ -126,7 +146,7 @@ const START_DATE = new Date('2026-03-26');
     '今天也要做最快乐的小星星呀！💫',
     '你是被整个宇宙偏爱的那颗星。🌟',
     '星星女士身上的光芒，能照亮所有不开心。💡',
-    '小将军走到哪里，哪里就开满了小花。🌷',
+    '绵绵小宝走到哪里，哪里就开满了小花。🌷',
     '今天的小星星也是一如既往地闪闪发光呢！✨',
     '没有什么比看到星星女士笑更让人开心的了。😊',
     '你让这个普普通通的世界变得特别美好。🎀',
@@ -308,18 +328,25 @@ const START_DATE = new Date('2026-03-26');
   }
 })();
 
-// ===== 许愿瓶 =====
+// ===== 许愿瓶：历史记录上锁 =====
 (function initWish() {
   const input = document.getElementById('wish-input');
   const btn = document.getElementById('wish-btn');
   const list = document.getElementById('wish-list');
   const countSpan = document.querySelector('#wish-count span');
   const starsContainer = document.getElementById('bottle-stars');
+  const lockPanel = document.getElementById('wish-lock');
+  const unlockBtn = document.getElementById('wish-unlock-btn');
+  const passwordInput = document.getElementById('wish-password');
+  const lockMessage = document.getElementById('wish-lock-message');
+  const historyPanel = document.getElementById('wish-history-panel');
   if (!input || !btn) return;
 
   const stored = JSON.parse(localStorage.getItem('wish_bottle') || '[]');
   const wishes = stored.map(item => typeof item === 'string' ? { text: item, date: '旧愿望', time: '' } : item);
+  let unlocked = sessionStorage.getItem('wish_unlocked') === 'true';
   renderWishes();
+  updateLockState();
 
   btn.addEventListener('click', () => {
     const text = input.value.trim();
@@ -341,6 +368,31 @@ const START_DATE = new Date('2026-03-26');
     if (e.key === 'Enter') btn.click();
   });
 
+  unlockBtn?.addEventListener('click', unlockWishes);
+  passwordInput?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlockWishes();
+  });
+
+  function unlockWishes() {
+    if ((passwordInput?.value || '').trim() === '000618') {
+      unlocked = true;
+      sessionStorage.setItem('wish_unlocked', 'true');
+      if (lockMessage) lockMessage.textContent = '解锁成功，愿望星星都出现啦~';
+      updateLockState();
+    } else if (lockMessage) {
+      lockMessage.textContent = '密码不对哦，再试一次。';
+      lockMessage.classList.add('shake-lock');
+      setTimeout(() => lockMessage.classList.remove('shake-lock'), 500);
+    }
+  }
+
+  function updateLockState() {
+    if (!list || !lockPanel) return;
+    lockPanel.classList.toggle('hidden', unlocked);
+    list.classList.toggle('hidden', !unlocked);
+    historyPanel?.classList.toggle('locked', !unlocked);
+  }
+
   function renderWishes() {
     if (list) {
       if (!wishes.length) {
@@ -360,6 +412,7 @@ const START_DATE = new Date('2026-03-26');
       }
       starsContainer.innerHTML = starsHTML;
     }
+    updateLockState();
   }
 
   function escapeHTML(text) {
@@ -380,6 +433,13 @@ const START_DATE = new Date('2026-03-26');
   const missionBtn = document.getElementById('mission-btn');
   const cards = document.querySelectorAll('.heart-card');
   const cardResult = document.getElementById('heart-card-result');
+  const loveFill = document.getElementById('love-meter-fill');
+  const loveText = document.getElementById('love-meter-text');
+  const loveBtn = document.getElementById('love-meter-btn');
+  const catchStage = document.getElementById('star-catch-stage');
+  const catchStar = document.getElementById('catch-star');
+  const catchScore = document.getElementById('star-catch-score');
+  const catchBtn = document.getElementById('star-catch-btn');
 
   const missions = [
     '给星星女士发一句“今天也最喜欢你”。',
@@ -416,6 +476,50 @@ const START_DATE = new Date('2026-03-26');
         setTimeout(() => { luckyCard = Math.floor(Math.random() * cards.length); resetCards(); }, 2200);
       });
     });
+  }
+
+  loveBtn?.addEventListener('click', () => {
+    const value = 96 + Math.floor(Math.random() * 5);
+    if (loveFill) loveFill.style.width = value + '%';
+    if (loveText) loveText.textContent = `今日心动值：${value}% —— 甜度超标！`;
+  });
+
+  if (catchBtn && catchStage && catchStar && catchScore) {
+    let score = 0;
+    let timer = null;
+    let playing = false;
+
+    catchBtn.addEventListener('click', () => {
+      if (playing) return;
+      playing = true;
+      score = 0;
+      catchScore.textContent = '得分：0';
+      catchBtn.textContent = '进行中...';
+      moveStar();
+      catchStar.classList.remove('hidden');
+      timer = setTimeout(() => {
+        playing = false;
+        catchStar.classList.add('hidden');
+        catchBtn.textContent = '再玩一次';
+        catchScore.textContent = `最终得分：${score}，星星都被你接住啦~`;
+      }, 10000);
+    });
+
+    catchStar.addEventListener('click', () => {
+      if (!playing) return;
+      score++;
+      catchScore.textContent = `得分：${score}`;
+      catchStar.classList.add('caught');
+      setTimeout(() => catchStar.classList.remove('caught'), 180);
+      moveStar();
+    });
+
+    function moveStar() {
+      const maxX = Math.max(0, catchStage.clientWidth - 48);
+      const maxY = Math.max(0, catchStage.clientHeight - 48);
+      catchStar.style.left = Math.random() * maxX + 'px';
+      catchStar.style.top = Math.random() * maxY + 'px';
+    }
   }
 })();
 
@@ -520,6 +624,63 @@ const START_DATE = new Date('2026-03-26');
   });
 })();
 
+// ===== 惊喜补给站 =====
+(function initSurpriseExtras() {
+  const loveNoteBtn = document.getElementById('love-note-btn');
+  const loveNoteText = document.getElementById('love-note-text');
+  const dateBtn = document.getElementById('date-idea-btn');
+  const dateText = document.getElementById('date-idea-text');
+  const dateWheel = document.getElementById('date-wheel');
+  const capsuleInput = document.getElementById('memory-capsule-input');
+  const capsuleBtn = document.getElementById('memory-capsule-btn');
+  const capsuleList = document.getElementById('memory-capsule-list');
+
+  const notes = [
+    '我喜欢你，不止今天，也不止明天，是每一个普通日子里都确定的喜欢。',
+    '你一笑，我就觉得人间值得多停留一会儿。',
+    '想把所有温柔都攒起来，慢慢送给你。',
+    '你是我心里不会过期的小惊喜。',
+  ];
+  const ideas = ['一起散步买奶茶', '在家看一部温柔电影', '去拍一组可爱照片', '给 Lucky 买一个小玩具', '一起吃海带和喜欢的菜'];
+
+  loveNoteBtn?.addEventListener('click', () => {
+    if (loveNoteText) loveNoteText.textContent = notes[Math.floor(Math.random() * notes.length)];
+  });
+
+  dateBtn?.addEventListener('click', () => {
+    const idea = ideas[Math.floor(Math.random() * ideas.length)];
+    if (dateText) dateText.textContent = idea;
+    if (dateWheel) {
+      dateWheel.classList.remove('spin-wheel');
+      void dateWheel.offsetWidth;
+      dateWheel.classList.add('spin-wheel');
+    }
+  });
+
+  let capsules = JSON.parse(localStorage.getItem('memory_capsules') || '[]');
+  renderCapsules();
+  capsuleBtn?.addEventListener('click', () => {
+    const text = (capsuleInput?.value || '').trim();
+    if (!text) return;
+    capsules.unshift({ text, date: new Date().toLocaleDateString('zh-CN') });
+    if (capsules.length > 5) capsules.length = 5;
+    localStorage.setItem('memory_capsules', JSON.stringify(capsules));
+    capsuleInput.value = '';
+    renderCapsules();
+  });
+
+  function renderCapsules() {
+    if (!capsuleList) return;
+    capsuleList.innerHTML = capsules.length
+      ? capsules.map(c => `<span class="capsule-item">🫧 ${escapeHTML(c.text)} <small>${c.date}</small></span>`).join('')
+      : '<span class="capsule-empty">还没有胶囊，先存一句吧~</span>';
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
+})();
+
 // ===== 主题切换 =====
 (function initThemeSwitcher() {
   const buttons = document.querySelectorAll('.theme-btn');
@@ -609,9 +770,9 @@ const START_DATE = new Date('2026-03-26');
   if (!pet || !actions.length) return;
 
   const messages = {
-    pet: ['Lucky 被摸摸啦，尾巴摇成小风扇！', '汪汪~ Lucky 最喜欢温柔摸摸。'],
-    feed: ['Lucky 吃到了小零食，开心转圈圈！', '咔嚓咔嚓，小西高地宝宝充满电。'],
-    play: ['Lucky 把球叼回来啦，还想再玩一次！', 'Lucky 蹦蹦跳跳：姐姐也太会玩啦！'],
+    pet: ['Lucky 被摸摸啦，西高地小脑袋蹭蹭你！', '汪汪~ Lucky 最喜欢温柔摸摸。'],
+    feed: ['Lucky 叼走小骨头，开心到耳朵都竖起来！', '咔嚓咔嚓，小西高地宝宝充满电。'],
+    play: ['Lucky 追着小球跑回来啦，还想再玩一次！', 'Lucky 蹦蹦跳跳：姐姐也太会玩啦！'],
   };
 
   pet.addEventListener('click', () => interact('pet'));
@@ -622,7 +783,8 @@ const START_DATE = new Date('2026-03-26');
     const msg = pool[Math.floor(Math.random() * pool.length)];
     pet.classList.remove('petting', 'feeding', 'playing');
     void pet.offsetWidth;
-    pet.classList.add(action === 'pet' ? 'petting' : action === 'feed' ? 'feeding' : 'playing');
+    const nextClass = action === 'pet' ? 'petting' : action === 'feed' ? 'feeding' : 'playing';
+    pet.classList.add(nextClass);
     if (bubble) bubble.textContent = msg;
     if (status) status.textContent = msg;
   }
