@@ -1,5 +1,5 @@
-// ===== 配置：在一起的第一天 =====
-const START_DATE = new Date('2026-03-26');
+// ===== 配置：相识的第一天 =====
+const START_DATE = new Date('2020-02-26');
 
 // ===== Tab 切换 =====
 (function initTabs() {
@@ -42,15 +42,18 @@ const START_DATE = new Date('2026-03-26');
   setInterval(update, 60 * 1000);
 })();
 
-// ===== 照片墙 — Bento Grid + 拍立得 + 灯箱 =====
+// ===== 绝世美颜照片集合：点击组件后打开 =====
 (function initPhotos() {
+  const cover = document.getElementById('beauty-cover');
+  const modal = document.getElementById('beauty-modal');
   const grid = document.getElementById('bento-grid');
+  const modalClose = document.getElementById('beauty-modal-close');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lbClose = document.getElementById('lightbox-close');
   const lbPrev = document.getElementById('lightbox-prev');
   const lbNext = document.getElementById('lightbox-next');
-  if (!grid) return;
+  if (!grid || !modal || !cover) return;
 
   const total = 9;
   let currentIndex = 0;
@@ -64,6 +67,7 @@ const START_DATE = new Date('2026-03-26');
     ['bento-w1',    'bento-tilt-l',  '🎀 可爱暴击'],
     ['bento-w2',    'bento-tilt-r',  '🌸 花与笑'],
     ['bento-w1',    'bento-tilt-l2', '💖 记在心里'],
+    ['bento-w1',    'bento-tilt-r2', '☁️ 心动云朵'],
   ];
 
   for (let i = 1; i <= Math.min(total, bentoLayout.length); i++) {
@@ -80,6 +84,19 @@ const START_DATE = new Date('2026-03-26');
     grid.appendChild(frame);
   }
 
+  cover.addEventListener('click', openBeautyModal);
+  modalClose?.addEventListener('click', closeBeautyModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeBeautyModal(); });
+
+  function openBeautyModal() {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeBeautyModal() {
+    modal.classList.add('hidden');
+    if (lightbox?.classList.contains('hidden')) document.body.style.overflow = '';
+  }
+
   function openLightbox(idx) {
     currentIndex = idx;
     lightboxImg.src = 'assets/images/photo' + (idx + 1) + '.jpg';
@@ -88,7 +105,7 @@ const START_DATE = new Date('2026-03-26');
   }
   function closeLightbox() {
     lightbox.classList.add('hidden');
-    document.body.style.overflow = '';
+    if (modal.classList.contains('hidden')) document.body.style.overflow = '';
   }
   function prev() { currentIndex = (currentIndex - 1 + total) % total; lightboxImg.src = 'assets/images/photo' + (currentIndex + 1) + '.jpg'; }
   function next() { currentIndex = (currentIndex + 1) % total; lightboxImg.src = 'assets/images/photo' + (currentIndex + 1) + '.jpg'; }
@@ -98,11 +115,101 @@ const START_DATE = new Date('2026-03-26');
   lbNext.addEventListener('click', next);
   lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (!lightbox.classList.contains('hidden')) closeLightbox();
+      else if (!modal.classList.contains('hidden')) closeBeautyModal();
+    }
     if (lightbox.classList.contains('hidden')) return;
-    if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') prev();
     if (e.key === 'ArrowRight') next();
   });
+})();
+
+// ===== 浪漫字句：50+ 库存，展示 6 句并可换一换 =====
+(function initRomanticQuotes() {
+  const grid = document.getElementById('quote-grid');
+  const btn = document.getElementById('quote-refresh-btn');
+  if (!grid) return;
+
+  const quotePool = [
+    { lang: 'cn', text: '山有木兮木有枝，心悦君兮君不知。', from: '《越人歌》' },
+    { lang: 'cn', text: '愿我如星君如月，夜夜流光相皎洁。', from: '范成大' },
+    { lang: 'cn', text: '玲珑骰子安红豆，入骨相思知不知。', from: '温庭筠' },
+    { lang: 'cn', text: '只愿君心似我心，定不负相思意。', from: '李之仪' },
+    { lang: 'cn', text: '晓看天色暮看云，行也思君，坐也思君。', from: '唐寅' },
+    { lang: 'cn', text: '两情若是久长时，又岂在朝朝暮暮。', from: '秦观' },
+    { lang: 'cn', text: '海上月是天上月，眼前人是心上人。', from: '专属改写' },
+    { lang: 'cn', text: '春水初生，春林初盛，春风十里，不如你。', from: '冯唐' },
+    { lang: 'cn', text: '世间安得双全法，不负如来不负卿。', from: '仓央嘉措' },
+    { lang: 'cn', text: '从此无心爱良夜，任他明月下西楼。', from: '李益' },
+    { lang: 'cn', text: '相思相见知何日，此时此夜难为情。', from: '李白' },
+    { lang: 'cn', text: '身无彩凤双飞翼，心有灵犀一点通。', from: '李商隐' },
+    { lang: 'cn', text: '愿有岁月可回首，且以深情共白头。', from: '现代情话' },
+    { lang: 'cn', text: '你是我疲惫生活里最明亮的糖。', from: '今日专属' },
+    { lang: 'cn', text: '我见青山多妩媚，料青山见你也温柔。', from: '专属改写' },
+    { lang: 'cn', text: '人间纵有百媚千红，唯独你是情之所钟。', from: '古风情话' },
+    { lang: 'cn', text: '月亮照回湖心，野鹤奔向闲云，我步入你。', from: '现代诗意' },
+    { lang: 'cn', text: '你来时冬至，但眉上风止。', from: '现代诗意' },
+    { lang: 'cn', text: '心里的花，因你开成了四季。', from: '今日专属' },
+    { lang: 'cn', text: '你眨一下眼，银河就落进我的心里。', from: '今日专属' },
+    { lang: 'cn', text: '我把喜欢写进风里，风路过你就变甜了。', from: '今日专属' },
+    { lang: 'cn', text: '万物皆有裂痕，那是光照进来的地方；你是我的光。', from: '灵感改写' },
+    { lang: 'cn', text: '想和你把普通日子过成闪闪发亮的小诗。', from: '今日专属' },
+    { lang: 'cn', text: '你不是路过，是我所有故事的主角。', from: '今日专属' },
+    { lang: 'cn', text: '星河滚烫，你是人间理想。', from: '现代情话' },
+    { lang: 'cn', text: '你站在那里，风都变得很温柔。', from: '今日专属' },
+    { lang: 'en', text: 'Whatever our souls are made of, yours and mine are the same.', from: 'Emily Brontë' },
+    { lang: 'en', text: 'You are my sun, my moon, and all my stars.', from: 'E. E. Cummings' },
+    { lang: 'en', text: 'I love you more than words can wield the matter.', from: 'Shakespeare' },
+    { lang: 'en', text: 'Grow old along with me; the best is yet to be.', from: 'Robert Browning' },
+    { lang: 'en', text: 'If I know what love is, it is because of you.', from: 'Hermann Hesse' },
+    { lang: 'en', text: 'My heart is and always will be yours.', from: 'Jane Austen' },
+    { lang: 'en', text: 'To me, you are perfect in all the small ways.', from: 'Modern love note' },
+    { lang: 'en', text: 'Every love story is beautiful, but ours is my favorite.', from: 'Modern love note' },
+    { lang: 'en', text: 'You make ordinary days feel like soft magic.', from: 'Modern love note' },
+    { lang: 'en', text: 'I choose you, again and again, in every little tomorrow.', from: 'Modern love note' },
+    { lang: 'en', text: 'In your smile, I find my favorite place to stay.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the poem I never knew how to write.', from: 'Modern love note' },
+    { lang: 'en', text: 'With you, even silence feels like a song.', from: 'Modern love note' },
+    { lang: 'en', text: 'I found a home in the way you say my name.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the gentle plot twist my heart needed.', from: 'Modern love note' },
+    { lang: 'en', text: 'I would find you in every lifetime.', from: 'Modern love note' },
+    { lang: 'en', text: 'Your laugh is my favorite kind of weather.', from: 'Modern love note' },
+    { lang: 'en', text: 'Love looks a lot like you on a quiet afternoon.', from: 'Modern love note' },
+    { lang: 'en', text: 'You turn my chaos into constellations.', from: 'Modern love note' },
+    { lang: 'en', text: 'Stay close; the universe feels warmer with you.', from: 'Modern love note' },
+    { lang: 'en', text: 'I carry your light in every corner of my day.', from: 'Modern love note' },
+    { lang: 'en', text: 'My favorite hello and my hardest goodbye are both you.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the sweetest reason I believe in serendipity.', from: 'Modern love note' },
+    { lang: 'en', text: 'The world is softer wherever your heart has been.', from: 'Modern love note' },
+    { lang: 'en', text: 'I love the little universe we keep making together.', from: 'Modern love note' },
+    { lang: 'en', text: 'You make my heart feel handwritten.', from: 'Modern love note' },
+    { lang: 'en', text: 'Beside you is my favorite direction.', from: 'Modern love note' },
+  ];
+
+  let lastStart = -1;
+  renderQuotes();
+  btn?.addEventListener('click', renderQuotes);
+
+  function renderQuotes() {
+    const cn = shuffle(quotePool.filter(q => q.lang === 'cn')).slice(0, 3);
+    const en = shuffle(quotePool.filter(q => q.lang === 'en')).slice(0, 3);
+    const selected = shuffle([...cn, ...en]);
+    grid.innerHTML = selected.map((q, index) => `
+      <article class="glass-card quote-card ${q.lang === 'en' ? 'quote-en' : 'quote-cn'} ${index === 0 ? 'quote-featured' : ''}">
+        <span class="quote-mark">${q.lang === 'en' ? '&' : '“'}</span>
+        <p class="quote-text">${escapeHTML(q.text)}</p>
+        <small>—— ${escapeHTML(q.from)}</small>
+      </article>`).join('');
+  }
+
+  function shuffle(arr) {
+    return arr.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(item => item.value);
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
 })();
 
 // ===== 今日夸夸 =====
@@ -110,7 +217,7 @@ const START_DATE = new Date('2026-03-26');
   const compliments = [
     '你今天一定是宇宙里最可爱的女孩子！🌟',
     '看到星星女士，全世界的花都开了。🌸',
-    '小将军笑起来的时候，连阳光都变得更温柔了。☀️',
+    '绵绵小宝笑起来的时候，连阳光都变得更温柔了。☀️',
     '你是整个银河系里最闪闪发光的存在！✨',
     '星星女士的眼睛里有整个星空，好美。🌌',
     '小犹太将军今天一定又是可爱满分的一天！💯',
@@ -118,7 +225,7 @@ const START_DATE = new Date('2026-03-26');
     '宇宙那么大，但你才是最耀眼的那颗星。⭐',
     '今天的你也超级无敌可爱，不接受反驳！🎀',
     '星星女士的笑容是世界上最甜的糖果。🍬',
-    '小将军的可爱能量，今天也充满格了！🔋',
+    '绵绵小宝的可爱能量，今天也充满格了！🔋',
     '你一定是上天派来治愈这个世界的小天使。👼',
     '每次看到星星女士，心情都会自动变好。💖',
     '全宇宙最温柔最可爱的人就是你啦！💝',
@@ -126,7 +233,7 @@ const START_DATE = new Date('2026-03-26');
     '今天也要做最快乐的小星星呀！💫',
     '你是被整个宇宙偏爱的那颗星。🌟',
     '星星女士身上的光芒，能照亮所有不开心。💡',
-    '小将军走到哪里，哪里就开满了小花。🌷',
+    '绵绵小宝走到哪里，哪里就开满了小花。🌷',
     '今天的小星星也是一如既往地闪闪发光呢！✨',
     '没有什么比看到星星女士笑更让人开心的了。😊',
     '你让这个普普通通的世界变得特别美好。🎀',
@@ -152,10 +259,87 @@ const START_DATE = new Date('2026-03-26');
 // ===== 信封情书 =====
 (function initEnvelope() {
   const env = document.getElementById('envelope');
+  const backdrop = document.getElementById('envelope-backdrop');
+  const closeBtn = document.getElementById('letter-close');
+  const hint = document.getElementById('envelope-hint');
   if (!env) return;
-  env.addEventListener('click', () => {
-    env.classList.toggle('open');
+
+  function openEnvelope() {
+    env.classList.add('open');
+    backdrop?.classList.remove('hidden');
+    if (hint) hint.textContent = '💌 信纸已打开，点击 × 或背景收起';
+    document.body.classList.add('letter-open');
+  }
+
+  function closeEnvelope() {
+    env.classList.remove('open');
+    backdrop?.classList.add('hidden');
+    if (hint) hint.textContent = '👆 点击信封打开';
+    document.body.classList.remove('letter-open');
+  }
+
+  env.addEventListener('click', e => {
+    if (e.target.closest('.letter-close')) return;
+    if (env.classList.contains('open')) return;
+    openEnvelope();
   });
+  closeBtn?.addEventListener('click', e => { e.stopPropagation(); closeEnvelope(); });
+  backdrop?.addEventListener('click', closeEnvelope);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && env.classList.contains('open')) closeEnvelope();
+  });
+})();
+
+// ===== 悄悄话补给站 =====
+(function initWhisperTools() {
+  const goodnightBtn = document.getElementById('goodnight-btn');
+  const goodnightNote = document.getElementById('goodnight-note');
+  const codeBtn = document.getElementById('secret-code-btn');
+  const codeText = document.getElementById('secret-code-text');
+  const input = document.getElementById('whisper-input');
+  const saveBtn = document.getElementById('whisper-save-btn');
+  const list = document.getElementById('whisper-saved-list');
+
+  const goodnights = [
+    '今晚月亮负责温柔，我负责想你，星星女士晚安。',
+    '把今天的不开心都交给云朵，明天醒来继续闪闪发光。',
+    '绵绵小宝要盖好被子，梦里也要被糖果和小花包围。',
+    '愿你今晚睡得像一颗安稳的小星星，亮亮的、甜甜的。',
+    '晚安，今天也辛苦啦，明天我继续站在你这边。',
+  ];
+  const codes = ['海带星球', '粉色秋天', '山竹云朵', '欧陆月光', 'Lucky摇尾巴', '000618小宇宙'];
+  let saved = JSON.parse(localStorage.getItem('whisper_notes') || '[]');
+  renderSaved();
+
+  goodnightBtn?.addEventListener('click', () => {
+    if (goodnightNote) goodnightNote.textContent = goodnights[Math.floor(Math.random() * goodnights.length)];
+  });
+  codeBtn?.addEventListener('click', () => {
+    if (codeText) codeText.textContent = `今日暗号：${codes[Math.floor(Math.random() * codes.length)]}`;
+  });
+  saveBtn?.addEventListener('click', saveWhisper);
+  input?.addEventListener('keydown', e => { if (e.key === 'Enter') saveWhisper(); });
+
+  function saveWhisper() {
+    const text = (input?.value || '').trim();
+    if (!text) return;
+    saved.unshift({ text, date: new Date().toLocaleDateString('zh-CN') });
+    if (saved.length > 8) saved.length = 8;
+    localStorage.setItem('whisper_notes', JSON.stringify(saved));
+    input.value = '';
+    renderSaved();
+  }
+
+  function renderSaved() {
+    if (!list) return;
+    list.innerHTML = saved.length
+      ? saved.map(item => `<span class="whisper-saved-item">💗 ${escapeHTML(item.text)} <small>${item.date}</small></span>`).join('')
+      : '<span class="whisper-empty">还没有贴上的悄悄话。</span>';
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
 })();
 
 // ===== 默契大考验 =====
@@ -164,16 +348,26 @@ const START_DATE = new Date('2026-03-26');
     {
       q: '星星女士最喜欢什么颜色？',
       options: ['粉色', '蓝色', '紫色', '白色'],
-      correct: 2,
+      correct: 0,
     },
     {
       q: '小犹太将军最爱的季节是？',
       options: ['春天', '夏天', '秋天', '冬天'],
+      correct: 2,
+    },
+    {
+      q: '她最爱吃的菜是？',
+      options: ['海带', '番茄炒蛋', '土豆丝', '糖醋排骨'],
       correct: 0,
     },
     {
-      q: '她最喜欢吃的甜品是？',
-      options: ['冰淇淋', '蛋糕', '巧克力', '布丁'],
+      q: '她最喜欢的车是？',
+      options: ['欧陆GT', '保时捷 911', '宝马 M4', '奔驰 G 级'],
+      correct: 0,
+    },
+    {
+      q: '她最喜欢吃的水果是？',
+      options: ['草莓', '山竹', '芒果', '车厘子'],
       correct: 1,
     },
   ];
@@ -275,17 +469,20 @@ const START_DATE = new Date('2026-03-26');
       btns.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       const mood = btn.dataset.mood;
-      resultEl.textContent = `今天星星女士的心情是：${mood} ${btn.querySelector('span').previousSibling?.textContent || '💗'}`;
+      const emoji = btn.childNodes[0].textContent.trim();
+      resultEl.textContent = `今天星星女士的心情是：${emoji} ${mood}，已经帮你记进历史啦~`;
 
-      const today = new Date().toLocaleDateString('zh-CN');
-      const existing = records.findIndex(r => r.date === today);
-      const emoji = btn.textContent.trim().replace(mood, '').trim();
+      const now = new Date();
+      const dateKey = now.toLocaleDateString('zh-CN');
+      const timeText = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const existing = records.findIndex(r => r.date === dateKey);
+      const nextRecord = { date: dateKey, time: timeText, mood, emoji };
       if (existing >= 0) {
-        records[existing] = { date: today, mood, emoji: emoji || btn.dataset.mood };
+        records[existing] = nextRecord;
       } else {
-        records.unshift({ date: today, mood, emoji: emoji || btn.dataset.mood });
+        records.unshift(nextRecord);
       }
-      if (records.length > 7) records.length = 7;
+      if (records.length > 30) records.length = 30;
       localStorage.setItem('mood_records', JSON.stringify(records));
       renderHistory();
     });
@@ -293,29 +490,48 @@ const START_DATE = new Date('2026-03-26');
 
   function renderHistory() {
     if (!historyEl) return;
+    if (!records.length) {
+      historyEl.classList.add('empty-history');
+      historyEl.textContent = '还没有打卡记录，今天先点一个心情吧~';
+      return;
+    }
+    historyEl.classList.remove('empty-history');
     historyEl.innerHTML = records
-      .map(r => `<span class="mood-record">${r.date}: ${r.mood}</span>`)
+      .map(r => `<article class="history-record"><span class="history-emoji">${r.emoji || '💗'}</span><div><strong>${r.mood}</strong><small>${r.date}${r.time ? ' ' + r.time : ''}</small></div></article>`)
       .join('');
   }
 })();
 
-// ===== 许愿瓶 =====
+// ===== 许愿瓶：历史记录上锁 =====
 (function initWish() {
   const input = document.getElementById('wish-input');
   const btn = document.getElementById('wish-btn');
   const list = document.getElementById('wish-list');
   const countSpan = document.querySelector('#wish-count span');
   const starsContainer = document.getElementById('bottle-stars');
+  const lockPanel = document.getElementById('wish-lock');
+  const unlockBtn = document.getElementById('wish-unlock-btn');
+  const passwordInput = document.getElementById('wish-password');
+  const lockMessage = document.getElementById('wish-lock-message');
+  const historyPanel = document.getElementById('wish-history-panel');
   if (!input || !btn) return;
 
-  const wishes = JSON.parse(localStorage.getItem('wish_bottle') || '[]');
+  const stored = JSON.parse(localStorage.getItem('wish_bottle') || '[]');
+  const wishes = stored.map(item => typeof item === 'string' ? { text: item, date: '旧愿望', time: '' } : item);
+  let unlocked = sessionStorage.getItem('wish_unlocked') === 'true';
   renderWishes();
+  updateLockState();
 
   btn.addEventListener('click', () => {
     const text = input.value.trim();
     if (!text) return;
-    wishes.unshift(text);
-    if (wishes.length > 10) wishes.length = 10;
+    const now = new Date();
+    wishes.unshift({
+      text,
+      date: now.toLocaleDateString('zh-CN'),
+      time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    });
+    if (wishes.length > 30) wishes.length = 30;
     localStorage.setItem('wish_bottle', JSON.stringify(wishes));
     input.value = '';
     renderWishes();
@@ -326,9 +542,42 @@ const START_DATE = new Date('2026-03-26');
     if (e.key === 'Enter') btn.click();
   });
 
+  unlockBtn?.addEventListener('click', unlockWishes);
+  passwordInput?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlockWishes();
+  });
+
+  function unlockWishes() {
+    if ((passwordInput?.value || '').trim() === '000618') {
+      unlocked = true;
+      sessionStorage.setItem('wish_unlocked', 'true');
+      if (lockMessage) lockMessage.textContent = '解锁成功，愿望星星都出现啦~';
+      updateLockState();
+    } else if (lockMessage) {
+      lockMessage.textContent = '密码不对哦，再试一次。';
+      lockMessage.classList.add('shake-lock');
+      setTimeout(() => lockMessage.classList.remove('shake-lock'), 500);
+    }
+  }
+
+  function updateLockState() {
+    if (!list || !lockPanel) return;
+    lockPanel.classList.toggle('hidden', unlocked);
+    list.classList.toggle('hidden', !unlocked);
+    historyPanel?.classList.toggle('locked', !unlocked);
+  }
+
   function renderWishes() {
-    list.innerHTML = wishes.map(w => `<span class="wish-tag">✨ ${w}</span>`).join('');
-    countSpan.textContent = 6 + wishes.length;
+    if (list) {
+      if (!wishes.length) {
+        list.classList.add('empty-history');
+        list.textContent = '还没有新的愿望，写下第一个吧~';
+      } else {
+        list.classList.remove('empty-history');
+        list.innerHTML = wishes.map(w => `<article class="history-record wish-record"><span class="history-emoji">✨</span><div><strong>${escapeHTML(w.text)}</strong><small>${w.date || ''}${w.time ? ' ' + w.time : ''}</small></div></article>`).join('');
+      }
+    }
+    if (countSpan) countSpan.textContent = 6 + wishes.length;
     if (starsContainer) {
       const total = 6 + wishes.length;
       let starsHTML = '';
@@ -337,23 +586,114 @@ const START_DATE = new Date('2026-03-26');
       }
       starsContainer.innerHTML = starsHTML;
     }
+    updateLockState();
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
   }
 
   function animateBottle() {
     const bottle = document.getElementById('wish-bottle');
     if (!bottle) return;
-    bottle.style.transform = 'scale(1.1)';
-    setTimeout(() => { bottle.style.transform = 'scale(1)'; }, 200);
+    bottle.style.transform = 'scale(1.1) rotate(3deg)';
+    setTimeout(() => { bottle.style.transform = 'scale(1)'; }, 220);
+  }
+})();
+
+// ===== 更多小游戏 =====
+(function initMiniGames() {
+  const missionText = document.getElementById('mission-text');
+  const missionBtn = document.getElementById('mission-btn');
+  const cards = document.querySelectorAll('.heart-card');
+  const cardResult = document.getElementById('heart-card-result');
+  const loveFill = document.getElementById('love-meter-fill');
+  const loveText = document.getElementById('love-meter-text');
+  const loveBtn = document.getElementById('love-meter-btn');
+  const catchStage = document.getElementById('star-catch-stage');
+  const catchStar = document.getElementById('catch-star');
+  const catchScore = document.getElementById('star-catch-score');
+  const catchBtn = document.getElementById('star-catch-btn');
+
+  const missions = [
+    '给星星女士发一句“今天也最喜欢你”。',
+    '一起拍一张今日份可爱合照。',
+    '选一首歌循环播放，然后抱抱一分钟。',
+    '今晚睡前说三个今天开心的小瞬间。',
+    '给 Lucky 一个空气摸摸，再给她一个真抱抱。',
+  ];
+
+  if (missionBtn && missionText) {
+    missionBtn.addEventListener('click', () => {
+      missionText.textContent = missions[Math.floor(Math.random() * missions.length)];
+    });
   }
 
-  // 如果已经有愿望，初始也渲染瓶子星星
-  if (wishes.length > 0 && starsContainer) {
-    const total = 6 + wishes.length;
-    let starsHTML = '';
-    for (let i = 0; i < total; i++) {
-      starsHTML += '<span>' + (['⭐','✨','💫','🌟'][i % 4]) + '</span>';
+  function resetCards() {
+    cards.forEach(card => {
+      card.textContent = '?';
+      card.classList.remove('opened', 'winner');
+      card.disabled = false;
+    });
+    if (cardResult) cardResult.textContent = '';
+  }
+
+  if (cards.length) {
+    let luckyCard = Math.floor(Math.random() * cards.length);
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = Number(card.dataset.card);
+        cards.forEach(c => { c.disabled = true; c.classList.add('opened'); });
+        cards.forEach((c, i) => { c.textContent = i === luckyCard ? '💖' : '🌸'; });
+        cards[luckyCard].classList.add('winner');
+        if (cardResult) cardResult.textContent = idx === luckyCard ? '猜中啦！今天也是被爱包围的一天~' : '没关系，爱心还是送给你啦~';
+        setTimeout(() => { luckyCard = Math.floor(Math.random() * cards.length); resetCards(); }, 2200);
+      });
+    });
+  }
+
+  loveBtn?.addEventListener('click', () => {
+    const value = 96 + Math.floor(Math.random() * 5);
+    if (loveFill) loveFill.style.width = value + '%';
+    if (loveText) loveText.textContent = `今日心动值：${value}% —— 甜度超标！`;
+  });
+
+  if (catchBtn && catchStage && catchStar && catchScore) {
+    let score = 0;
+    let timer = null;
+    let playing = false;
+
+    catchBtn.addEventListener('click', () => {
+      if (playing) return;
+      playing = true;
+      score = 0;
+      catchScore.textContent = '得分：0';
+      catchBtn.textContent = '进行中...';
+      moveStar();
+      catchStar.classList.remove('hidden');
+      timer = setTimeout(() => {
+        playing = false;
+        catchStar.classList.add('hidden');
+        catchBtn.textContent = '再玩一次';
+        catchScore.textContent = `最终得分：${score}，星星都被你接住啦~`;
+      }, 10000);
+    });
+
+    catchStar.addEventListener('click', () => {
+      if (!playing) return;
+      score++;
+      catchScore.textContent = `得分：${score}`;
+      catchStar.classList.add('caught');
+      setTimeout(() => catchStar.classList.remove('caught'), 180);
+      moveStar();
+    });
+
+    function moveStar() {
+      const maxX = Math.max(0, catchStage.clientWidth - 48);
+      const maxY = Math.max(0, catchStage.clientHeight - 48);
+      catchStar.style.left = Math.random() * maxX + 'px';
+      catchStar.style.top = Math.random() * maxY + 'px';
     }
-    starsContainer.innerHTML = starsHTML;
   }
 })();
 
@@ -458,12 +798,216 @@ const START_DATE = new Date('2026-03-26');
   });
 })();
 
+// ===== 惊喜补给站 =====
+(function initSurpriseExtras() {
+  const loveNoteBtn = document.getElementById('love-note-btn');
+  const loveNoteText = document.getElementById('love-note-text');
+  const dateBtn = document.getElementById('date-idea-btn');
+  const dateText = document.getElementById('date-idea-text');
+  const dateWheel = document.getElementById('date-wheel');
+  const capsuleInput = document.getElementById('memory-capsule-input');
+  const capsuleBtn = document.getElementById('memory-capsule-btn');
+  const capsuleList = document.getElementById('memory-capsule-list');
+
+  const notes = [
+    '我喜欢你，不止今天，也不止明天，是每一个普通日子里都确定的喜欢。',
+    '你一笑，我就觉得人间值得多停留一会儿。',
+    '想把所有温柔都攒起来，慢慢送给你。',
+    '你是我心里不会过期的小惊喜。',
+  ];
+  const ideas = [
+    '一起散步买奶茶',
+    '在家看一部温柔电影',
+    '去拍一组可爱照片',
+    '给 Lucky 买一个小玩具',
+    '一起吃海带和喜欢的菜',
+    '去海边吹风看落日',
+    '在公园野餐铺小毯子',
+    '做一顿双人晚餐',
+    '一起逛花店挑一束花',
+    '去书店互选一本书',
+    '在家做手工相册',
+    '一起拼一幅拼图',
+    '去甜品店点两份蛋糕',
+    '一起做山竹水果盘',
+    '开车兜风听五首歌',
+    '去看一场夜景灯光',
+    '一起写未来愿望清单',
+    '做一杯热可可聊天',
+    '去宠物友好咖啡馆',
+    '带 Lucky 去草地玩球',
+    '一起逛超市买零食',
+    '做情侣头像拍摄挑战',
+    '去电玩城抓娃娃',
+    '晚上一起看星星',
+    '一起整理照片回忆',
+    '做一顿火锅约会',
+    '去美术馆慢慢逛',
+    '在家办睡衣电影夜',
+    '一起做早餐三明治',
+    '去湖边散步拍云',
+    '互相写一封小信',
+    '一起练习一首歌',
+    '做一天无手机约会',
+    '去买一对小挂件',
+    '一起逛家居店',
+    '给对方挑香薰蜡烛',
+    '在雨天听歌喝茶',
+    '一起做饼干',
+    '去看一场喜剧电影',
+    '一起坐摩天轮',
+    '去城市天台看风景',
+    '做情侣问答游戏',
+    '一起给 Lucky 洗香香',
+    '去拍大头贴',
+    '逛夜市吃小吃',
+    '一起种一盆小植物',
+    '互相画一幅画像',
+    '做一次盲盒交换',
+    '去陶艺店捏杯子',
+    '一起做手链',
+    '在家办小型音乐会',
+    '去尝试一家新餐厅',
+    '一起复刻第一次聊天',
+    '做一张恋爱地图',
+    '去买一盒彩色笔写卡片',
+    '一起晨跑后吃早餐',
+    '去图书馆安静坐一会',
+    '一起看日出',
+    '做一份专属歌单',
+    '去买山竹和酸奶',
+    '一起做海带汤',
+    '给彼此拍十张照片',
+    '一起看纪录片',
+    '去逛文创市集',
+    '在家做披萨',
+    '一起玩桌游',
+    '去坐一次公交随缘下车',
+    '一起看烟火或灯展',
+    '做一个周末计划板',
+    '去花鸟市场看小动物',
+    '一起买一件情侣小物',
+    '互相读一段喜欢的文字',
+    '去公园喂鸽子',
+    '一起打卡一家咖啡店',
+    '在家做冰淇淋',
+    '一起整理衣柜搭配穿搭',
+    '做一次夸夸挑战',
+    '去体验密室或剧本杀',
+    '一起看老照片',
+    '去买 Lucky 的小零食',
+    '一起做瑜伽拉伸',
+    '去江边骑车',
+    '一起做指甲配色灵感',
+    '在家拍主题写真',
+    '去听一场小型演出',
+    '一起写 100 件小事清单',
+    '做一次随机菜谱挑战',
+    '去逛宜家吃冰淇淋',
+    '一起买一束满天星',
+    '在家搭一个小帐篷',
+    '互相录一段晚安语音',
+    '去吃一顿寿喜锅',
+    '一起看一集童年动画',
+    '去找城市里最漂亮的云',
+    '一起 DIY 手机壳',
+    '做一次幸运签约会',
+    '去买漂亮贴纸装饰手账',
+    '一起学一道新菜',
+    '去逛二手书摊',
+    '在家做奶茶',
+    '一起给网页想新功能',
+    '去试驾或看欧陆GT',
+    '一起拍 Lucky 的可爱短片'
+  ];
+
+  loveNoteBtn?.addEventListener('click', () => {
+    if (loveNoteText) loveNoteText.textContent = notes[Math.floor(Math.random() * notes.length)];
+  });
+
+  dateBtn?.addEventListener('click', () => {
+    const idea = ideas[Math.floor(Math.random() * ideas.length)];
+    if (dateText) dateText.textContent = idea;
+    if (dateWheel) {
+      dateWheel.classList.remove('spin-wheel');
+      void dateWheel.offsetWidth;
+      dateWheel.classList.add('spin-wheel');
+    }
+  });
+
+  let capsules = JSON.parse(localStorage.getItem('memory_capsules') || '[]');
+  renderCapsules();
+  capsuleBtn?.addEventListener('click', () => {
+    const text = (capsuleInput?.value || '').trim();
+    if (!text) return;
+    capsules.unshift({ text, date: new Date().toLocaleDateString('zh-CN') });
+    if (capsules.length > 5) capsules.length = 5;
+    localStorage.setItem('memory_capsules', JSON.stringify(capsules));
+    capsuleInput.value = '';
+    renderCapsules();
+  });
+
+  function renderCapsules() {
+    if (!capsuleList) return;
+    capsuleList.innerHTML = capsules.length
+      ? capsules.map(c => `<span class="capsule-item">🫧 ${escapeHTML(c.text)} <small>${c.date}</small></span>`).join('')
+      : '<span class="capsule-empty">还没有胶囊，先存一句吧~</span>';
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
+})();
+
+// ===== 主题切换 =====
+(function initThemeSwitcher() {
+  const buttons = document.querySelectorAll('.theme-btn');
+  if (!buttons.length) return;
+  const savedTheme = localStorage.getItem('page_theme') || 'kitty';
+  setTheme(savedTheme);
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTheme(btn.dataset.theme);
+      localStorage.setItem('page_theme', btn.dataset.theme);
+    });
+  });
+
+  function setTheme(theme) {
+    document.body.dataset.theme = theme;
+    buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
+  }
+})();
+
 // ===== 音乐播放器 =====
 (function initMusic() {
   const btn = document.getElementById('music-toggle');
   const bgm = document.getElementById('bgm');
+  const select = document.getElementById('music-select');
   if (!btn || !bgm) return;
+
+  const songs = [
+    { name: '甜甜循环', src: 'assets/audio/bgm.mp3', rate: 1 },
+    { name: '星星散步', src: 'assets/audio/bgm.mp3', rate: 0.92 },
+    { name: '粉色梦境', src: 'assets/audio/bgm.mp3', rate: 0.84 },
+    { name: '云朵抱抱', src: 'assets/audio/bgm.mp3', rate: 1.08 },
+    { name: 'Lucky 摇尾巴', src: 'assets/audio/bgm.mp3', rate: 1.18 },
+  ];
+
   let playing = false;
+  let currentSong = Number(localStorage.getItem('music_song') || 0);
+  if (select) select.value = String(currentSong);
+  loadSong(currentSong);
+
+  if (select) {
+    select.addEventListener('change', () => {
+      currentSong = Number(select.value);
+      localStorage.setItem('music_song', String(currentSong));
+      const shouldPlay = playing;
+      loadSong(currentSong);
+      if (shouldPlay) playMusic();
+    });
+  }
 
   btn.addEventListener('click', () => {
     if (playing) {
@@ -472,16 +1016,56 @@ const START_DATE = new Date('2026-03-26');
       btn.textContent = '🎵';
       playing = false;
     } else {
-      bgm.play().then(() => {
-        btn.classList.add('playing');
-        btn.textContent = '🎶';
-        playing = true;
-      }).catch(() => {
-        // 如果音频文件不存在，静默处理
-        btn.textContent = '🚫';
-      });
+      playMusic();
     }
   });
+
+  function loadSong(index) {
+    const song = songs[index] || songs[0];
+    bgm.src = song.src;
+    bgm.playbackRate = song.rate;
+    btn.title = `播放：${song.name}`;
+  }
+
+  function playMusic() {
+    bgm.play().then(() => {
+      btn.classList.add('playing');
+      btn.textContent = '🎶';
+      playing = true;
+    }).catch(() => {
+      btn.textContent = '🚫';
+      playing = false;
+    });
+  }
+})();
+
+// ===== Lucky 小宠物互动 =====
+(function initLuckyDog() {
+  const pet = document.getElementById('dog-pet');
+  const bubble = document.getElementById('dog-bubble');
+  const status = document.getElementById('dog-status');
+  const actions = document.querySelectorAll('.dog-action');
+  if (!pet || !actions.length) return;
+
+  const messages = {
+    pet: ['Lucky 被摸摸啦，西高地小脑袋蹭蹭你！', '汪汪~ Lucky 最喜欢温柔摸摸。'],
+    feed: ['Lucky 叼走小骨头，开心到耳朵都竖起来！', '咔嚓咔嚓，小西高地宝宝充满电。'],
+    play: ['Lucky 追着小球跑回来啦，还想再玩一次！', 'Lucky 蹦蹦跳跳：姐姐也太会玩啦！'],
+  };
+
+  pet.addEventListener('click', () => interact('pet'));
+  actions.forEach(btn => btn.addEventListener('click', () => interact(btn.dataset.action)));
+
+  function interact(action) {
+    const pool = messages[action] || messages.pet;
+    const msg = pool[Math.floor(Math.random() * pool.length)];
+    pet.classList.remove('petting', 'feeding', 'playing');
+    void pet.offsetWidth;
+    const nextClass = action === 'pet' ? 'petting' : action === 'feed' ? 'feeding' : 'playing';
+    pet.classList.add(nextClass);
+    if (bubble) bubble.textContent = msg;
+    if (status) status.textContent = msg;
+  }
 })();
 
 // ===== 回到顶部 =====
@@ -502,6 +1086,59 @@ const START_DATE = new Date('2026-03-26');
   });
 })();
 
+// ===== 全局 Lucky 挂件拖拽 =====
+(function initLuckyPendant() {
+  const pendant = document.getElementById('lucky-pendant');
+  if (!pendant) return;
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let originX = 0;
+  let originY = 0;
+
+  const saved = JSON.parse(localStorage.getItem('lucky_pendant_position') || 'null');
+  if (saved && Number.isFinite(saved.x) && Number.isFinite(saved.y)) {
+    pendant.style.left = saved.x + 'px';
+    pendant.style.top = saved.y + 'px';
+    pendant.style.right = 'auto';
+  }
+
+  pendant.addEventListener('pointerdown', e => {
+    dragging = true;
+    pendant.classList.add('dragging');
+    pendant.setPointerCapture?.(e.pointerId);
+    const rect = pendant.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    originX = rect.left;
+    originY = rect.top;
+    pendant.style.left = originX + 'px';
+    pendant.style.top = originY + 'px';
+    pendant.style.right = 'auto';
+  });
+
+  pendant.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const maxX = window.innerWidth - pendant.offsetWidth;
+    const maxY = window.innerHeight - pendant.offsetHeight;
+    const nextX = Math.min(Math.max(0, originX + e.clientX - startX), maxX);
+    const nextY = Math.min(Math.max(0, originY + e.clientY - startY), maxY);
+    pendant.style.left = nextX + 'px';
+    pendant.style.top = nextY + 'px';
+  });
+
+  function stopDrag() {
+    if (!dragging) return;
+    dragging = false;
+    pendant.classList.remove('dragging');
+    const rect = pendant.getBoundingClientRect();
+    localStorage.setItem('lucky_pendant_position', JSON.stringify({ x: rect.left, y: rect.top }));
+  }
+
+  pendant.addEventListener('pointerup', stopDrag);
+  pendant.addEventListener('pointercancel', stopDrag);
+})();
+
 // ===== 鼠标点击特效 =====
 (function initClickEffects() {
   const container = document.getElementById('click-effects');
@@ -510,7 +1147,7 @@ const START_DATE = new Date('2026-03-26');
 
   document.addEventListener('click', e => {
     // 排除交互元素
-    if (e.target.closest('button, .envelope, .photo-frame, .quiz-option, .mood-btn, #fortune-slip')) return;
+    if (e.target.closest('button, input, select, .envelope, .envelope-backdrop, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet, #lucky-pendant')) return;
     const el = document.createElement('span');
     el.className = 'click-effect';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];

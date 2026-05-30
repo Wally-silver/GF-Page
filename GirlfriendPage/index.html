@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>给小犹太将军的专属小网页</title>
+  <title>给小犹太将军的专属赛博空间</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="kitty">
 
   <!-- ===== 背景装饰 ===== -->
   <div class="clouds">
@@ -31,11 +31,28 @@
     <button class="tab-btn" data-tab="whispers">💌 悄悄话</button>
     <button class="tab-btn" data-tab="interact">🎮 小互动</button>
     <button class="tab-btn" data-tab="surprise">💝 惊喜盒</button>
+    <button class="tab-btn" data-tab="lucky">🐶 Lucky</button>
   </nav>
 
-  <!-- 音乐播放器 -->
-  <div class="music-player" id="music-player">
-    <button id="music-toggle" class="music-btn" title="播放背景音乐">🎵</button>
+  <!-- 顶部控制区 -->
+  <div class="page-controls" aria-label="网页控制区">
+    <div class="theme-switcher glass-card" id="theme-switcher" aria-label="网页主题切换">
+      <span class="switcher-label">主题</span>
+      <button class="theme-btn active" data-theme="kitty">🎀 Hello Kitty</button>
+      <button class="theme-btn" data-theme="kuromi">🖤 库洛米</button>
+      <button class="theme-btn" data-theme="cinnamoroll">☁️ 玉桂狗</button>
+    </div>
+
+    <div class="music-player glass-card" id="music-player">
+      <button id="music-toggle" class="music-btn" title="播放背景音乐">🎵</button>
+      <select id="music-select" class="music-select" aria-label="选择歌曲">
+        <option value="0">甜甜循环</option>
+        <option value="1">星星散步</option>
+        <option value="2">粉色梦境</option>
+        <option value="3">云朵抱抱</option>
+        <option value="4">Lucky 摇尾巴</option>
+      </select>
+    </div>
   </div>
 
   <!-- ======================== 首页 ======================== -->
@@ -54,7 +71,7 @@
       </div>
       <h1 class="hero-title">
         <span class="title-line line-1">给小犹太将军的</span>
-        <span class="title-line line-2">专属小网页</span>
+        <span class="title-line line-2">专属赛博空间</span>
       </h1>
       <p class="hero-subtitle">✨ 星星女士的可爱宇宙 ✨</p>
       <div class="hero-decoration">
@@ -86,13 +103,37 @@
         </div>
         <div class="counter-inner">
           <span class="counter-emoji">💗</span>
-          <p class="counter-label">我们已经在一起</p>
+          <p class="counter-label">我们已相识</p>
           <div class="counter-digits">
             <span id="day-count">0</span>
           </div>
           <p class="counter-unit">天</p>
-          <p class="counter-sub">每一天都是甜甜的小宇宙 ✨</p>
+          <p class="counter-sub">从 2020.02.26 开始，每一天都值得珍藏 ✨</p>
         </div>
+      </div>
+    </section>
+
+    <!-- 手绘家的小场景 -->
+    <section class="home-scene-section" aria-labelledby="home-scene-title">
+      <h2 class="section-title" id="home-scene-title">🖍️ 我们的小小客厅 🖍️</h2>
+      <div class="glass-card handdrawn-scene-card">
+        <div class="handdrawn-scene" aria-label="手绘风客厅：阳光、沙发、两个人和 Lucky">
+          <div class="scene-sun"></div>
+          <div class="scene-cloud cloud-a"></div>
+          <div class="scene-cloud cloud-b"></div>
+          <div class="scene-window"><span></span><span></span><span></span></div>
+          <div class="scene-shelf">
+            <span class="scene-bottle b1"></span><span class="scene-bottle b2"></span><span class="scene-bottle b3"></span>
+            <span class="scene-bear bear-1"></span><span class="scene-bear bear-2"></span><span class="scene-bear bear-3"></span>
+          </div>
+          <div class="scene-sofa"></div>
+          <div class="scene-person person-boy"><span class="person-head"></span><span class="person-body"></span><span class="person-leg l1"></span><span class="person-leg l2"></span></div>
+          <div class="scene-person person-girl"><span class="person-head"></span><span class="person-hair"></span><span class="person-body"></span><span class="person-leg l1"></span><span class="person-leg l2"></span></div>
+          <div class="scene-rug"></div>
+          <div class="scene-table"><span></span><span></span></div>
+          <div class="scene-lucky"><span class="scene-lucky-ear e1"></span><span class="scene-lucky-ear e2"></span><span class="scene-lucky-body"></span><span class="scene-lucky-tail"></span></div>
+        </div>
+        <p class="scene-caption">把你画的温暖小家放进首页：有阳光、沙发、我们和摇尾巴的 Lucky。</p>
       </div>
     </section>
 
@@ -126,9 +167,9 @@
         <div class="nickname-card card-ribbon">
           <div class="nc-glow"></div>
           <span class="card-emoji">🎀</span>
-          <h3>小将军</h3>
-          <p>虽然叫将军但可爱系数突破天际</p>
-          <span class="nc-tag">Cutie</span>
+          <h3>绵绵小宝</h3>
+          <p>软乎乎、甜糯糯，是被温柔包起来的小宝贝</p>
+          <span class="nc-tag">Softie</span>
         </div>
         <div class="nickname-card card-sparkle">
           <div class="nc-glow"></div>
@@ -149,11 +190,34 @@
       <span class="divider-icon">📷</span>
     </div>
 
-    <!-- 照片墙 — Bento Grid + 拍立得 -->
-    <section class="photo-section">
-      <h2 class="section-title">📷 星星相册 📷</h2>
-      <div class="bento-grid" id="bento-grid">
-        <!-- JS 动态生成 bento 布局 -->
+    <!-- 绝世美颜 — 点击后打开照片集合 -->
+    <section class="photo-section beauty-gallery" aria-labelledby="beauty-title">
+      <button class="beauty-cover glass-card" id="beauty-cover" type="button" aria-haspopup="dialog" aria-controls="beauty-modal">
+        <span class="beauty-cover-icon">📷</span>
+        <span class="beauty-cover-title" id="beauty-title">欣赏惊为天人的绝世美颜</span>
+        <span class="beauty-cover-subtitle">点击打开专属照片集合</span>
+        <span class="beauty-cover-sparkles">✨ 💗 ✨</span>
+      </button>
+    </section>
+
+    <!-- 艺术字与情话 -->
+    <section class="quote-section" aria-labelledby="quote-title">
+      <div class="section-heading-row">
+        <h2 class="section-title" id="quote-title">✒️ 写给星星女士的浪漫字句 ✒️</h2>
+        <button id="quote-refresh-btn" class="quote-refresh-btn" type="button">换一换</button>
+      </div>
+      <div class="quote-grid" id="quote-grid" aria-live="polite">
+        <!-- JS 从 50+ 句库存中抽取 6 句，保持中英文尽量均衡 -->
+      </div>
+    </section>
+
+    <!-- 今日小仪式 -->
+    <section class="ritual-section" aria-labelledby="ritual-title">
+      <h2 class="section-title" id="ritual-title">🎐 今日小仪式 🎐</h2>
+      <div class="ritual-grid">
+        <div class="glass-card ritual-card"><span>🌙</span><p>睡前互道晚安</p></div>
+        <div class="glass-card ritual-card"><span>🍵</span><p>提醒她好好喝水</p></div>
+        <div class="glass-card ritual-card"><span>🧸</span><p>给绵绵小宝一个抱抱</p></div>
       </div>
     </section>
 
@@ -221,12 +285,14 @@
     <section class="envelope-section">
       <h2 class="section-title">✉️ 有一封信要给你 ✉️</h2>
       <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="envelope-backdrop hidden" id="envelope-backdrop" aria-hidden="true"></div>
         <div class="envelope" id="envelope">
           <div class="envelope-flap"></div>
           <div class="envelope-body">
             <span class="envelope-seal">💝</span>
           </div>
-          <div class="envelope-letter" id="envelope-letter">
+          <div class="envelope-letter" id="envelope-letter" role="dialog" aria-modal="true" aria-label="给星星女士的信">
+            <button class="letter-close" id="letter-close" type="button" aria-label="收起信纸">×</button>
             <p>亲爱的星星女士：</p>
             <p>当你打开这封信的时候，全宇宙的花都开了。</p>
             <p>谢谢你做我的小星星，在每个平凡的日子里闪闪发光。</p>
@@ -235,7 +301,32 @@
             <p>—— 永远喜欢你的我 💗</p>
           </div>
         </div>
-        <p class="envelope-hint">👆 点击信封打开</p>
+        <p class="envelope-hint" id="envelope-hint">👆 点击信封打开</p>
+      </div>
+    </section>
+
+    <!-- 悄悄话补给 -->
+    <section class="whisper-tools-section">
+      <h2 class="section-title">🧸 悄悄话补给站 🧸</h2>
+      <div class="whisper-tools-grid">
+        <div class="glass-card whisper-tool-card">
+          <h3>🌙 晚安小纸条</h3>
+          <p id="goodnight-note">点击生成今晚的晚安悄悄话。</p>
+          <button id="goodnight-btn" class="compliment-btn" type="button">生成晚安</button>
+        </div>
+        <div class="glass-card whisper-tool-card">
+          <h3>🔐 今日秘密暗号</h3>
+          <p id="secret-code-text">今天的暗号还没有出现。</p>
+          <button id="secret-code-btn" class="compliment-btn" type="button">生成暗号</button>
+        </div>
+        <div class="glass-card whisper-tool-card">
+          <h3>💬 写一句悄悄话</h3>
+          <div class="whisper-input-row">
+            <input id="whisper-input" class="wish-input" maxlength="40" placeholder="写一句只给她看的话...">
+            <button id="whisper-save-btn" class="compliment-btn" type="button">贴上墙</button>
+          </div>
+          <div id="whisper-saved-list" class="whisper-saved-list"></div>
+        </div>
       </div>
     </section>
 
@@ -253,7 +344,7 @@
         </div>
         <div class="sticky-note note-3">
           <span class="note-pin">📌</span>
-          <p>天冷了要加衣服，小将军也不能感冒。🧣</p>
+          <p>天冷了要加衣服，绵绵小宝也不能感冒。🧣</p>
         </div>
         <div class="sticky-note note-4">
           <span class="note-pin">📌</span>
@@ -313,7 +404,10 @@
           <button class="mood-btn" data-mood="甜蜜">😍<span>甜蜜</span></button>
         </div>
         <p id="mood-result" class="mood-result"></p>
-        <div id="mood-history" class="mood-history"></div>
+        <div class="history-panel">
+          <div class="history-title">📅 心情打卡历史</div>
+          <div id="mood-history" class="mood-history empty-history">还没有打卡记录，今天先点一个心情吧~</div>
+        </div>
       </div>
     </section>
 
@@ -335,7 +429,54 @@
           <button id="wish-btn" class="compliment-btn">✨ 放进许愿瓶</button>
         </div>
         <p id="wish-count" class="wish-count">瓶子里有 <span>6</span> 颗小星星</p>
-        <div id="wish-list" class="wish-list"></div>
+        <div class="history-panel wish-history-panel locked" id="wish-history-panel">
+          <div class="history-title">🔐 许愿瓶历史</div>
+          <div class="wish-lock" id="wish-lock">
+            <p>这里被温柔上锁啦，输入密码才可以查看愿望历史。</p>
+            <div class="wish-lock-row">
+              <input type="password" id="wish-password" class="wish-input wish-password" placeholder="输入密码" inputmode="numeric" autocomplete="off">
+              <button id="wish-unlock-btn" class="compliment-btn" type="button">解锁</button>
+            </div>
+            <p id="wish-lock-message" class="lock-message"></p>
+          </div>
+          <div id="wish-list" class="wish-list empty-history hidden">还没有新的愿望，写下第一个吧~</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 更多小游戏 -->
+    <section class="mini-games-section">
+      <h2 class="section-title">🕹️ 更多小游戏 🕹️</h2>
+      <div class="mini-games-grid">
+        <div class="glass-card mini-game-card">
+          <h3>💖 今日甜蜜任务</h3>
+          <p id="mission-text">点击按钮抽一个今天的小任务吧~</p>
+          <button id="mission-btn" class="compliment-btn">抽任务</button>
+        </div>
+        <div class="glass-card mini-game-card">
+          <h3>🎴 翻牌找爱心</h3>
+          <p class="mini-game-tip">三张牌里藏着一颗爱心，猜猜在哪？</p>
+          <div class="heart-cards" id="heart-cards">
+            <button class="heart-card" data-card="0">?</button>
+            <button class="heart-card" data-card="1">?</button>
+            <button class="heart-card" data-card="2">?</button>
+          </div>
+          <p id="heart-card-result" class="mini-game-result"></p>
+        </div>
+        <div class="glass-card mini-game-card">
+          <h3>💘 心动值测试</h3>
+          <p class="mini-game-tip">点击按钮看看今天的甜蜜心动值。</p>
+          <div class="love-meter"><div id="love-meter-fill" class="love-meter-fill"></div></div>
+          <p id="love-meter-text" class="mini-game-result">等待测试中...</p>
+          <button id="love-meter-btn" class="compliment-btn">测一测</button>
+        </div>
+        <div class="glass-card mini-game-card">
+          <h3>🌟 接住小星星</h3>
+          <p class="mini-game-tip">10 秒内点击出现的小星星，收集甜蜜分数。</p>
+          <div id="star-catch-stage" class="star-catch-stage"><button id="catch-star" class="catch-star hidden" type="button">⭐</button></div>
+          <p id="star-catch-score" class="mini-game-result">得分：0</p>
+          <button id="star-catch-btn" class="compliment-btn">开始</button>
+        </div>
       </div>
     </section>
 
@@ -393,6 +534,90 @@
       </div>
     </section>
 
+    <!-- 惊喜补给站 -->
+    <section class="surprise-extra-section">
+      <h2 class="section-title">🌈 惊喜补给站 🌈</h2>
+      <div class="surprise-extra-grid">
+        <div class="glass-card surprise-extra-card">
+          <h3>💌 今日情话盲盒</h3>
+          <p id="love-note-text">点击打开一条只属于你的情话。</p>
+          <button id="love-note-btn" class="compliment-btn">打开盲盒</button>
+        </div>
+        <div class="glass-card surprise-extra-card">
+          <h3>🎡 约会灵感转盘</h3>
+          <div id="date-wheel" class="date-wheel">🎡</div>
+          <p id="date-idea-text">今天适合安排一个小约会。</p>
+          <button id="date-idea-btn" class="compliment-btn">转一下</button>
+        </div>
+        <div class="glass-card surprise-extra-card">
+          <h3>🕰️ 回忆胶囊</h3>
+          <p id="memory-capsule-text">把一句想说的话存进今天的胶囊。</p>
+          <div class="capsule-row">
+            <input id="memory-capsule-input" class="wish-input" maxlength="40" placeholder="写一句回忆...">
+            <button id="memory-capsule-btn" class="compliment-btn">保存</button>
+          </div>
+          <div id="memory-capsule-list" class="capsule-list"></div>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ======================== Lucky 小狗网页 ======================== -->
+  <section class="tab-panel" id="panel-lucky">
+    <header class="hero dog-hero">
+      <h1 class="hero-title">🐶 Lucky 的小窝</h1>
+      <p class="hero-subtitle">一只西高地宝宝，随时准备摇尾巴陪你玩</p>
+    </header>
+
+    <section class="dog-section">
+      <div class="glass-card dog-card">
+        <div class="dog-scene" id="dog-scene" aria-label="Lucky Q版小宠物">
+          <div class="dog-pet westie westie-reference side-westie" id="dog-pet">
+            <div class="westie-ear westie-ear-left"><span></span></div>
+            <div class="westie-ear westie-ear-right"><span></span></div>
+            <div class="westie-head">
+              <span class="westie-top-fur fur-a"></span>
+              <span class="westie-top-fur fur-b"></span>
+              <span class="westie-top-fur fur-c"></span>
+              <span class="westie-cheek-fur cheek-left"></span>
+              <span class="westie-cheek-fur cheek-right"></span>
+              <span class="westie-eye westie-eye-left"></span>
+              <span class="westie-eye westie-eye-right"></span>
+              <span class="westie-brow westie-brow-left"></span>
+              <span class="westie-brow westie-brow-right"></span>
+              <span class="westie-muzzle"></span>
+              <span class="westie-nose"></span>
+              <span class="westie-mouth"></span>
+              <span class="westie-tongue"></span>
+              <span class="westie-whisker whisker-left-1"></span>
+              <span class="westie-whisker whisker-left-2"></span>
+              <span class="westie-whisker whisker-right-1"></span>
+              <span class="westie-whisker whisker-right-2"></span>
+            </div>
+            <div class="westie-body">
+              <span class="westie-neck-fluff"></span>
+              <span class="westie-tail"></span>
+              <span class="westie-leg leg-left-front"></span>
+              <span class="westie-leg leg-right-front"></span>
+              <span class="westie-leg leg-left-back"></span>
+              <span class="westie-leg leg-right-back"></span>
+              <span class="westie-paw westie-paw-left"></span>
+              <span class="westie-paw westie-paw-right"></span>
+            </div>
+            <span class="dog-toy dog-toy-ball">🎾</span>
+            <span class="dog-toy dog-toy-snack">🦴</span>
+          </div>
+          <div id="dog-bubble" class="dog-bubble">汪！我是 Lucky，摸摸我吧~</div>
+        </div>
+        <div class="dog-actions">
+          <button class="compliment-btn dog-action" data-action="pet">摸摸 Lucky</button>
+          <button class="compliment-btn dog-action" data-action="feed">喂小零食</button>
+          <button class="compliment-btn dog-action" data-action="play">一起玩球</button>
+        </div>
+        <p class="dog-status" id="dog-status">Lucky 正在乖乖等你互动。</p>
+      </div>
+    </section>
   </section>
 
   <!-- ===== 底部 ===== -->
@@ -405,12 +630,38 @@
   <!-- 回到顶部 -->
   <button id="back-to-top" class="back-to-top hidden" title="回到顶部">⬆</button>
 
+  <!-- 欣赏惊为天人的绝世美颜照片集合弹窗 -->
+  <div id="beauty-modal" class="beauty-modal hidden" role="dialog" aria-modal="true" aria-labelledby="beauty-modal-title">
+    <div class="beauty-modal-card glass-card">
+      <button id="beauty-modal-close" class="beauty-modal-close" type="button" aria-label="关闭照片集合">&times;</button>
+      <h2 id="beauty-modal-title" class="section-title">📷 欣赏惊为天人的绝世美颜照片集合 📷</h2>
+      <div class="bento-grid" id="bento-grid">
+        <!-- JS 动态生成 bento 布局 -->
+      </div>
+    </div>
+  </div>
+
   <!-- 照片灯箱 -->
   <div id="lightbox" class="lightbox hidden">
     <span class="lightbox-close" id="lightbox-close">&times;</span>
     <button class="lightbox-prev" id="lightbox-prev">&#10094;</button>
     <img id="lightbox-img" src="" alt="">
     <button class="lightbox-next" id="lightbox-next">&#10095;</button>
+  </div>
+
+  <!-- 全局可拖动 Lucky 挂件 -->
+  <div id="lucky-pendant" class="lucky-pendant" role="button" tabindex="0" aria-label="可拖动的 Lucky 西高地挂件">
+    <div class="pendant-string"></div>
+    <div class="pendant-westie">
+      <span class="pendant-ear front"></span>
+      <span class="pendant-ear back"></span>
+      <span class="pendant-head"></span>
+      <span class="pendant-body"></span>
+      <span class="pendant-tail"></span>
+      <span class="pendant-leg leg-a"></span>
+      <span class="pendant-leg leg-b"></span>
+    </div>
+    <span class="pendant-label">Lucky</span>
   </div>
 
   <!-- 点击特效 -->
