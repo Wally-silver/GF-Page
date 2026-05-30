@@ -125,6 +125,93 @@ const START_DATE = new Date('2020-02-26');
   });
 })();
 
+// ===== 浪漫字句：50+ 库存，展示 6 句并可换一换 =====
+(function initRomanticQuotes() {
+  const grid = document.getElementById('quote-grid');
+  const btn = document.getElementById('quote-refresh-btn');
+  if (!grid) return;
+
+  const quotePool = [
+    { lang: 'cn', text: '山有木兮木有枝，心悦君兮君不知。', from: '《越人歌》' },
+    { lang: 'cn', text: '愿我如星君如月，夜夜流光相皎洁。', from: '范成大' },
+    { lang: 'cn', text: '玲珑骰子安红豆，入骨相思知不知。', from: '温庭筠' },
+    { lang: 'cn', text: '只愿君心似我心，定不负相思意。', from: '李之仪' },
+    { lang: 'cn', text: '晓看天色暮看云，行也思君，坐也思君。', from: '唐寅' },
+    { lang: 'cn', text: '两情若是久长时，又岂在朝朝暮暮。', from: '秦观' },
+    { lang: 'cn', text: '海上月是天上月，眼前人是心上人。', from: '专属改写' },
+    { lang: 'cn', text: '春水初生，春林初盛，春风十里，不如你。', from: '冯唐' },
+    { lang: 'cn', text: '世间安得双全法，不负如来不负卿。', from: '仓央嘉措' },
+    { lang: 'cn', text: '从此无心爱良夜，任他明月下西楼。', from: '李益' },
+    { lang: 'cn', text: '相思相见知何日，此时此夜难为情。', from: '李白' },
+    { lang: 'cn', text: '身无彩凤双飞翼，心有灵犀一点通。', from: '李商隐' },
+    { lang: 'cn', text: '愿有岁月可回首，且以深情共白头。', from: '现代情话' },
+    { lang: 'cn', text: '你是我疲惫生活里最明亮的糖。', from: '今日专属' },
+    { lang: 'cn', text: '我见青山多妩媚，料青山见你也温柔。', from: '专属改写' },
+    { lang: 'cn', text: '人间纵有百媚千红，唯独你是情之所钟。', from: '古风情话' },
+    { lang: 'cn', text: '月亮照回湖心，野鹤奔向闲云，我步入你。', from: '现代诗意' },
+    { lang: 'cn', text: '你来时冬至，但眉上风止。', from: '现代诗意' },
+    { lang: 'cn', text: '心里的花，因你开成了四季。', from: '今日专属' },
+    { lang: 'cn', text: '你眨一下眼，银河就落进我的心里。', from: '今日专属' },
+    { lang: 'cn', text: '我把喜欢写进风里，风路过你就变甜了。', from: '今日专属' },
+    { lang: 'cn', text: '万物皆有裂痕，那是光照进来的地方；你是我的光。', from: '灵感改写' },
+    { lang: 'cn', text: '想和你把普通日子过成闪闪发亮的小诗。', from: '今日专属' },
+    { lang: 'cn', text: '你不是路过，是我所有故事的主角。', from: '今日专属' },
+    { lang: 'cn', text: '星河滚烫，你是人间理想。', from: '现代情话' },
+    { lang: 'cn', text: '你站在那里，风都变得很温柔。', from: '今日专属' },
+    { lang: 'en', text: 'Whatever our souls are made of, yours and mine are the same.', from: 'Emily Brontë' },
+    { lang: 'en', text: 'You are my sun, my moon, and all my stars.', from: 'E. E. Cummings' },
+    { lang: 'en', text: 'I love you more than words can wield the matter.', from: 'Shakespeare' },
+    { lang: 'en', text: 'Grow old along with me; the best is yet to be.', from: 'Robert Browning' },
+    { lang: 'en', text: 'If I know what love is, it is because of you.', from: 'Hermann Hesse' },
+    { lang: 'en', text: 'My heart is and always will be yours.', from: 'Jane Austen' },
+    { lang: 'en', text: 'To me, you are perfect in all the small ways.', from: 'Modern love note' },
+    { lang: 'en', text: 'Every love story is beautiful, but ours is my favorite.', from: 'Modern love note' },
+    { lang: 'en', text: 'You make ordinary days feel like soft magic.', from: 'Modern love note' },
+    { lang: 'en', text: 'I choose you, again and again, in every little tomorrow.', from: 'Modern love note' },
+    { lang: 'en', text: 'In your smile, I find my favorite place to stay.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the poem I never knew how to write.', from: 'Modern love note' },
+    { lang: 'en', text: 'With you, even silence feels like a song.', from: 'Modern love note' },
+    { lang: 'en', text: 'I found a home in the way you say my name.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the gentle plot twist my heart needed.', from: 'Modern love note' },
+    { lang: 'en', text: 'I would find you in every lifetime.', from: 'Modern love note' },
+    { lang: 'en', text: 'Your laugh is my favorite kind of weather.', from: 'Modern love note' },
+    { lang: 'en', text: 'Love looks a lot like you on a quiet afternoon.', from: 'Modern love note' },
+    { lang: 'en', text: 'You turn my chaos into constellations.', from: 'Modern love note' },
+    { lang: 'en', text: 'Stay close; the universe feels warmer with you.', from: 'Modern love note' },
+    { lang: 'en', text: 'I carry your light in every corner of my day.', from: 'Modern love note' },
+    { lang: 'en', text: 'My favorite hello and my hardest goodbye are both you.', from: 'Modern love note' },
+    { lang: 'en', text: 'You are the sweetest reason I believe in serendipity.', from: 'Modern love note' },
+    { lang: 'en', text: 'The world is softer wherever your heart has been.', from: 'Modern love note' },
+    { lang: 'en', text: 'I love the little universe we keep making together.', from: 'Modern love note' },
+    { lang: 'en', text: 'You make my heart feel handwritten.', from: 'Modern love note' },
+    { lang: 'en', text: 'Beside you is my favorite direction.', from: 'Modern love note' },
+  ];
+
+  let lastStart = -1;
+  renderQuotes();
+  btn?.addEventListener('click', renderQuotes);
+
+  function renderQuotes() {
+    const cn = shuffle(quotePool.filter(q => q.lang === 'cn')).slice(0, 3);
+    const en = shuffle(quotePool.filter(q => q.lang === 'en')).slice(0, 3);
+    const selected = shuffle([...cn, ...en]);
+    grid.innerHTML = selected.map((q, index) => `
+      <article class="glass-card quote-card ${q.lang === 'en' ? 'quote-en' : 'quote-cn'} ${index === 0 ? 'quote-featured' : ''}">
+        <span class="quote-mark">${q.lang === 'en' ? '&' : '“'}</span>
+        <p class="quote-text">${escapeHTML(q.text)}</p>
+        <small>—— ${escapeHTML(q.from)}</small>
+      </article>`).join('');
+  }
+
+  function shuffle(arr) {
+    return arr.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(item => item.value);
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
+})();
+
 // ===== 今日夸夸 =====
 (function initCompliment() {
   const compliments = [
@@ -172,10 +259,87 @@ const START_DATE = new Date('2020-02-26');
 // ===== 信封情书 =====
 (function initEnvelope() {
   const env = document.getElementById('envelope');
+  const backdrop = document.getElementById('envelope-backdrop');
+  const closeBtn = document.getElementById('letter-close');
+  const hint = document.getElementById('envelope-hint');
   if (!env) return;
-  env.addEventListener('click', () => {
-    env.classList.toggle('open');
+
+  function openEnvelope() {
+    env.classList.add('open');
+    backdrop?.classList.remove('hidden');
+    if (hint) hint.textContent = '💌 信纸已打开，点击 × 或背景收起';
+    document.body.classList.add('letter-open');
+  }
+
+  function closeEnvelope() {
+    env.classList.remove('open');
+    backdrop?.classList.add('hidden');
+    if (hint) hint.textContent = '👆 点击信封打开';
+    document.body.classList.remove('letter-open');
+  }
+
+  env.addEventListener('click', e => {
+    if (e.target.closest('.letter-close')) return;
+    if (env.classList.contains('open')) return;
+    openEnvelope();
   });
+  closeBtn?.addEventListener('click', e => { e.stopPropagation(); closeEnvelope(); });
+  backdrop?.addEventListener('click', closeEnvelope);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && env.classList.contains('open')) closeEnvelope();
+  });
+})();
+
+// ===== 悄悄话补给站 =====
+(function initWhisperTools() {
+  const goodnightBtn = document.getElementById('goodnight-btn');
+  const goodnightNote = document.getElementById('goodnight-note');
+  const codeBtn = document.getElementById('secret-code-btn');
+  const codeText = document.getElementById('secret-code-text');
+  const input = document.getElementById('whisper-input');
+  const saveBtn = document.getElementById('whisper-save-btn');
+  const list = document.getElementById('whisper-saved-list');
+
+  const goodnights = [
+    '今晚月亮负责温柔，我负责想你，星星女士晚安。',
+    '把今天的不开心都交给云朵，明天醒来继续闪闪发光。',
+    '绵绵小宝要盖好被子，梦里也要被糖果和小花包围。',
+    '愿你今晚睡得像一颗安稳的小星星，亮亮的、甜甜的。',
+    '晚安，今天也辛苦啦，明天我继续站在你这边。',
+  ];
+  const codes = ['海带星球', '粉色秋天', '山竹云朵', '欧陆月光', 'Lucky摇尾巴', '000618小宇宙'];
+  let saved = JSON.parse(localStorage.getItem('whisper_notes') || '[]');
+  renderSaved();
+
+  goodnightBtn?.addEventListener('click', () => {
+    if (goodnightNote) goodnightNote.textContent = goodnights[Math.floor(Math.random() * goodnights.length)];
+  });
+  codeBtn?.addEventListener('click', () => {
+    if (codeText) codeText.textContent = `今日暗号：${codes[Math.floor(Math.random() * codes.length)]}`;
+  });
+  saveBtn?.addEventListener('click', saveWhisper);
+  input?.addEventListener('keydown', e => { if (e.key === 'Enter') saveWhisper(); });
+
+  function saveWhisper() {
+    const text = (input?.value || '').trim();
+    if (!text) return;
+    saved.unshift({ text, date: new Date().toLocaleDateString('zh-CN') });
+    if (saved.length > 8) saved.length = 8;
+    localStorage.setItem('whisper_notes', JSON.stringify(saved));
+    input.value = '';
+    renderSaved();
+  }
+
+  function renderSaved() {
+    if (!list) return;
+    list.innerHTML = saved.length
+      ? saved.map(item => `<span class="whisper-saved-item">💗 ${escapeHTML(item.text)} <small>${item.date}</small></span>`).join('')
+      : '<span class="whisper-empty">还没有贴上的悄悄话。</span>';
+  }
+
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
 })();
 
 // ===== 默契大考验 =====
@@ -195,6 +359,16 @@ const START_DATE = new Date('2020-02-26');
       q: '她最爱吃的菜是？',
       options: ['海带', '番茄炒蛋', '土豆丝', '糖醋排骨'],
       correct: 0,
+    },
+    {
+      q: '她最喜欢的车是？',
+      options: ['欧陆GT', '保时捷 911', '宝马 M4', '奔驰 G 级'],
+      correct: 0,
+    },
+    {
+      q: '她最喜欢吃的水果是？',
+      options: ['草莓', '山竹', '芒果', '车厘子'],
+      correct: 1,
     },
   ];
 
@@ -641,7 +815,111 @@ const START_DATE = new Date('2020-02-26');
     '想把所有温柔都攒起来，慢慢送给你。',
     '你是我心里不会过期的小惊喜。',
   ];
-  const ideas = ['一起散步买奶茶', '在家看一部温柔电影', '去拍一组可爱照片', '给 Lucky 买一个小玩具', '一起吃海带和喜欢的菜'];
+  const ideas = [
+    '一起散步买奶茶',
+    '在家看一部温柔电影',
+    '去拍一组可爱照片',
+    '给 Lucky 买一个小玩具',
+    '一起吃海带和喜欢的菜',
+    '去海边吹风看落日',
+    '在公园野餐铺小毯子',
+    '做一顿双人晚餐',
+    '一起逛花店挑一束花',
+    '去书店互选一本书',
+    '在家做手工相册',
+    '一起拼一幅拼图',
+    '去甜品店点两份蛋糕',
+    '一起做山竹水果盘',
+    '开车兜风听五首歌',
+    '去看一场夜景灯光',
+    '一起写未来愿望清单',
+    '做一杯热可可聊天',
+    '去宠物友好咖啡馆',
+    '带 Lucky 去草地玩球',
+    '一起逛超市买零食',
+    '做情侣头像拍摄挑战',
+    '去电玩城抓娃娃',
+    '晚上一起看星星',
+    '一起整理照片回忆',
+    '做一顿火锅约会',
+    '去美术馆慢慢逛',
+    '在家办睡衣电影夜',
+    '一起做早餐三明治',
+    '去湖边散步拍云',
+    '互相写一封小信',
+    '一起练习一首歌',
+    '做一天无手机约会',
+    '去买一对小挂件',
+    '一起逛家居店',
+    '给对方挑香薰蜡烛',
+    '在雨天听歌喝茶',
+    '一起做饼干',
+    '去看一场喜剧电影',
+    '一起坐摩天轮',
+    '去城市天台看风景',
+    '做情侣问答游戏',
+    '一起给 Lucky 洗香香',
+    '去拍大头贴',
+    '逛夜市吃小吃',
+    '一起种一盆小植物',
+    '互相画一幅画像',
+    '做一次盲盒交换',
+    '去陶艺店捏杯子',
+    '一起做手链',
+    '在家办小型音乐会',
+    '去尝试一家新餐厅',
+    '一起复刻第一次聊天',
+    '做一张恋爱地图',
+    '去买一盒彩色笔写卡片',
+    '一起晨跑后吃早餐',
+    '去图书馆安静坐一会',
+    '一起看日出',
+    '做一份专属歌单',
+    '去买山竹和酸奶',
+    '一起做海带汤',
+    '给彼此拍十张照片',
+    '一起看纪录片',
+    '去逛文创市集',
+    '在家做披萨',
+    '一起玩桌游',
+    '去坐一次公交随缘下车',
+    '一起看烟火或灯展',
+    '做一个周末计划板',
+    '去花鸟市场看小动物',
+    '一起买一件情侣小物',
+    '互相读一段喜欢的文字',
+    '去公园喂鸽子',
+    '一起打卡一家咖啡店',
+    '在家做冰淇淋',
+    '一起整理衣柜搭配穿搭',
+    '做一次夸夸挑战',
+    '去体验密室或剧本杀',
+    '一起看老照片',
+    '去买 Lucky 的小零食',
+    '一起做瑜伽拉伸',
+    '去江边骑车',
+    '一起做指甲配色灵感',
+    '在家拍主题写真',
+    '去听一场小型演出',
+    '一起写 100 件小事清单',
+    '做一次随机菜谱挑战',
+    '去逛宜家吃冰淇淋',
+    '一起买一束满天星',
+    '在家搭一个小帐篷',
+    '互相录一段晚安语音',
+    '去吃一顿寿喜锅',
+    '一起看一集童年动画',
+    '去找城市里最漂亮的云',
+    '一起 DIY 手机壳',
+    '做一次幸运签约会',
+    '去买漂亮贴纸装饰手账',
+    '一起学一道新菜',
+    '去逛二手书摊',
+    '在家做奶茶',
+    '一起给网页想新功能',
+    '去试驾或看欧陆GT',
+    '一起拍 Lucky 的可爱短片'
+  ];
 
   loveNoteBtn?.addEventListener('click', () => {
     if (loveNoteText) loveNoteText.textContent = notes[Math.floor(Math.random() * notes.length)];
@@ -816,7 +1094,7 @@ const START_DATE = new Date('2020-02-26');
 
   document.addEventListener('click', e => {
     // 排除交互元素
-    if (e.target.closest('button, select, .envelope, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet')) return;
+    if (e.target.closest('button, input, select, .envelope, .envelope-backdrop, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet')) return;
     const el = document.createElement('span');
     el.className = 'click-effect';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];

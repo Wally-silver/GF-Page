@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>给小犹太将军的专属小网页</title>
+  <title>给小犹太将军的专属赛博空间</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-theme="kitty">
@@ -71,7 +71,7 @@
       </div>
       <h1 class="hero-title">
         <span class="title-line line-1">给小犹太将军的</span>
-        <span class="title-line line-2">专属小网页</span>
+        <span class="title-line line-2">专属赛博空间</span>
       </h1>
       <p class="hero-subtitle">✨ 星星女士的可爱宇宙 ✨</p>
       <div class="hero-decoration">
@@ -170,7 +170,7 @@
     <section class="photo-section beauty-gallery" aria-labelledby="beauty-title">
       <button class="beauty-cover glass-card" id="beauty-cover" type="button" aria-haspopup="dialog" aria-controls="beauty-modal">
         <span class="beauty-cover-icon">📷</span>
-        <span class="beauty-cover-title" id="beauty-title">绝世美颜</span>
+        <span class="beauty-cover-title" id="beauty-title">欣赏惊为天人的绝世美颜</span>
         <span class="beauty-cover-subtitle">点击打开专属照片集合</span>
         <span class="beauty-cover-sparkles">✨ 💗 ✨</span>
       </button>
@@ -178,25 +178,12 @@
 
     <!-- 艺术字与情话 -->
     <section class="quote-section" aria-labelledby="quote-title">
-      <h2 class="section-title" id="quote-title">✒️ 写给星星女士的浪漫字句 ✒️</h2>
-      <div class="quote-grid">
-        <article class="glass-card quote-card quote-featured">
-          <span class="quote-mark">“</span>
-          <p class="quote-art">山有木兮木有枝，心悦君兮君不知。</p>
-          <small>——《越人歌》</small>
-        </article>
-        <article class="glass-card quote-card">
-          <p>愿我如星君如月，夜夜流光相皎洁。</p>
-          <small>—— 范成大</small>
-        </article>
-        <article class="glass-card quote-card">
-          <p>Whatever our souls are made of, yours and mine are the same.</p>
-          <small>—— Emily Brontë</small>
-        </article>
-        <article class="glass-card quote-card">
-          <p>你是我绕过山河错落，才找到的人间烟火。</p>
-          <small>—— 今日专属情话</small>
-        </article>
+      <div class="section-heading-row">
+        <h2 class="section-title" id="quote-title">✒️ 写给星星女士的浪漫字句 ✒️</h2>
+        <button id="quote-refresh-btn" class="quote-refresh-btn" type="button">换一换</button>
+      </div>
+      <div class="quote-grid" id="quote-grid" aria-live="polite">
+        <!-- JS 从 50+ 句库存中抽取 6 句，保持中英文尽量均衡 -->
       </div>
     </section>
 
@@ -274,12 +261,14 @@
     <section class="envelope-section">
       <h2 class="section-title">✉️ 有一封信要给你 ✉️</h2>
       <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="envelope-backdrop hidden" id="envelope-backdrop" aria-hidden="true"></div>
         <div class="envelope" id="envelope">
           <div class="envelope-flap"></div>
           <div class="envelope-body">
             <span class="envelope-seal">💝</span>
           </div>
-          <div class="envelope-letter" id="envelope-letter">
+          <div class="envelope-letter" id="envelope-letter" role="dialog" aria-modal="true" aria-label="给星星女士的信">
+            <button class="letter-close" id="letter-close" type="button" aria-label="收起信纸">×</button>
             <p>亲爱的星星女士：</p>
             <p>当你打开这封信的时候，全宇宙的花都开了。</p>
             <p>谢谢你做我的小星星，在每个平凡的日子里闪闪发光。</p>
@@ -288,7 +277,32 @@
             <p>—— 永远喜欢你的我 💗</p>
           </div>
         </div>
-        <p class="envelope-hint">👆 点击信封打开</p>
+        <p class="envelope-hint" id="envelope-hint">👆 点击信封打开</p>
+      </div>
+    </section>
+
+    <!-- 悄悄话补给 -->
+    <section class="whisper-tools-section">
+      <h2 class="section-title">🧸 悄悄话补给站 🧸</h2>
+      <div class="whisper-tools-grid">
+        <div class="glass-card whisper-tool-card">
+          <h3>🌙 晚安小纸条</h3>
+          <p id="goodnight-note">点击生成今晚的晚安悄悄话。</p>
+          <button id="goodnight-btn" class="compliment-btn" type="button">生成晚安</button>
+        </div>
+        <div class="glass-card whisper-tool-card">
+          <h3>🔐 今日秘密暗号</h3>
+          <p id="secret-code-text">今天的暗号还没有出现。</p>
+          <button id="secret-code-btn" class="compliment-btn" type="button">生成暗号</button>
+        </div>
+        <div class="glass-card whisper-tool-card">
+          <h3>💬 写一句悄悄话</h3>
+          <div class="whisper-input-row">
+            <input id="whisper-input" class="wish-input" maxlength="40" placeholder="写一句只给她看的话...">
+            <button id="whisper-save-btn" class="compliment-btn" type="button">贴上墙</button>
+          </div>
+          <div id="whisper-saved-list" class="whisper-saved-list"></div>
+        </div>
       </div>
     </section>
 
@@ -535,13 +549,15 @@
     <section class="dog-section">
       <div class="glass-card dog-card">
         <div class="dog-scene" id="dog-scene" aria-label="Lucky Q版小宠物">
-          <div class="dog-pet westie" id="dog-pet">
-            <div class="westie-ear westie-ear-left"></div>
-            <div class="westie-ear westie-ear-right"></div>
+          <div class="dog-pet westie westie-reference" id="dog-pet">
+            <div class="westie-ear westie-ear-left"><span></span></div>
+            <div class="westie-ear westie-ear-right"><span></span></div>
             <div class="westie-head">
-              <span class="westie-fur fur-1"></span>
-              <span class="westie-fur fur-2"></span>
-              <span class="westie-fur fur-3"></span>
+              <span class="westie-top-fur fur-a"></span>
+              <span class="westie-top-fur fur-b"></span>
+              <span class="westie-top-fur fur-c"></span>
+              <span class="westie-cheek-fur cheek-left"></span>
+              <span class="westie-cheek-fur cheek-right"></span>
               <span class="westie-eye westie-eye-left"></span>
               <span class="westie-eye westie-eye-right"></span>
               <span class="westie-brow westie-brow-left"></span>
@@ -549,12 +565,19 @@
               <span class="westie-muzzle"></span>
               <span class="westie-nose"></span>
               <span class="westie-mouth"></span>
-              <span class="westie-blush westie-blush-left"></span>
-              <span class="westie-blush westie-blush-right"></span>
+              <span class="westie-tongue"></span>
+              <span class="westie-whisker whisker-left-1"></span>
+              <span class="westie-whisker whisker-left-2"></span>
+              <span class="westie-whisker whisker-right-1"></span>
+              <span class="westie-whisker whisker-right-2"></span>
             </div>
             <div class="westie-body">
+              <span class="westie-neck-fluff"></span>
               <span class="westie-tail"></span>
-              <span class="westie-chest-fur"></span>
+              <span class="westie-leg leg-left-front"></span>
+              <span class="westie-leg leg-right-front"></span>
+              <span class="westie-leg leg-left-back"></span>
+              <span class="westie-leg leg-right-back"></span>
               <span class="westie-paw westie-paw-left"></span>
               <span class="westie-paw westie-paw-right"></span>
             </div>
@@ -583,11 +606,11 @@
   <!-- 回到顶部 -->
   <button id="back-to-top" class="back-to-top hidden" title="回到顶部">⬆</button>
 
-  <!-- 绝世美颜照片集合弹窗 -->
+  <!-- 欣赏惊为天人的绝世美颜照片集合弹窗 -->
   <div id="beauty-modal" class="beauty-modal hidden" role="dialog" aria-modal="true" aria-labelledby="beauty-modal-title">
     <div class="beauty-modal-card glass-card">
       <button id="beauty-modal-close" class="beauty-modal-close" type="button" aria-label="关闭照片集合">&times;</button>
-      <h2 id="beauty-modal-title" class="section-title">📷 绝世美颜照片集合 📷</h2>
+      <h2 id="beauty-modal-title" class="section-title">📷 欣赏惊为天人的绝世美颜照片集合 📷</h2>
       <div class="bento-grid" id="bento-grid">
         <!-- JS 动态生成 bento 布局 -->
       </div>
