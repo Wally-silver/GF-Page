@@ -6,7 +6,7 @@
   <title>给小犹太将军的专属小网页</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="kitty">
 
   <!-- ===== 背景装饰 ===== -->
   <div class="clouds">
@@ -31,11 +31,26 @@
     <button class="tab-btn" data-tab="whispers">💌 悄悄话</button>
     <button class="tab-btn" data-tab="interact">🎮 小互动</button>
     <button class="tab-btn" data-tab="surprise">💝 惊喜盒</button>
+    <button class="tab-btn" data-tab="lucky">🐶 Lucky</button>
   </nav>
 
   <!-- 音乐播放器 -->
-  <div class="music-player" id="music-player">
+  <div class="theme-switcher glass-card" id="theme-switcher" aria-label="网页主题切换">
+    <span class="switcher-label">主题</span>
+    <button class="theme-btn active" data-theme="kitty">🎀 Hello Kitty</button>
+    <button class="theme-btn" data-theme="kuromi">🖤 库洛米</button>
+    <button class="theme-btn" data-theme="cinnamoroll">☁️ 玉桂狗</button>
+  </div>
+
+  <div class="music-player glass-card" id="music-player">
     <button id="music-toggle" class="music-btn" title="播放背景音乐">🎵</button>
+    <select id="music-select" class="music-select" aria-label="选择歌曲">
+      <option value="0">甜甜循环</option>
+      <option value="1">星星散步</option>
+      <option value="2">粉色梦境</option>
+      <option value="3">云朵抱抱</option>
+      <option value="4">Lucky 摇尾巴</option>
+    </select>
   </div>
 
   <!-- ======================== 首页 ======================== -->
@@ -149,9 +164,10 @@
       <span class="divider-icon">📷</span>
     </div>
 
-    <!-- 照片墙 — Bento Grid + 拍立得 -->
-    <section class="photo-section">
-      <h2 class="section-title">📷 星星相册 📷</h2>
+    <!-- 绝世美颜 — 集中展示主页照片 -->
+    <section class="photo-section beauty-gallery" aria-labelledby="beauty-title">
+      <h2 class="section-title" id="beauty-title">📷 绝世美颜 📷</h2>
+      <p class="section-subtitle">把主页所有闪闪发光的照片都集中收藏在这里。</p>
       <div class="bento-grid" id="bento-grid">
         <!-- JS 动态生成 bento 布局 -->
       </div>
@@ -313,7 +329,10 @@
           <button class="mood-btn" data-mood="甜蜜">😍<span>甜蜜</span></button>
         </div>
         <p id="mood-result" class="mood-result"></p>
-        <div id="mood-history" class="mood-history"></div>
+        <div class="history-panel">
+          <div class="history-title">📅 心情打卡历史</div>
+          <div id="mood-history" class="mood-history empty-history">还没有打卡记录，今天先点一个心情吧~</div>
+        </div>
       </div>
     </section>
 
@@ -335,7 +354,32 @@
           <button id="wish-btn" class="compliment-btn">✨ 放进许愿瓶</button>
         </div>
         <p id="wish-count" class="wish-count">瓶子里有 <span>6</span> 颗小星星</p>
-        <div id="wish-list" class="wish-list"></div>
+        <div class="history-panel wish-history-panel">
+          <div class="history-title">🌟 许愿瓶历史</div>
+          <div id="wish-list" class="wish-list empty-history">还没有新的愿望，写下第一个吧~</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 更多小游戏 -->
+    <section class="mini-games-section">
+      <h2 class="section-title">🕹️ 更多小游戏 🕹️</h2>
+      <div class="mini-games-grid">
+        <div class="glass-card mini-game-card">
+          <h3>💖 今日甜蜜任务</h3>
+          <p id="mission-text">点击按钮抽一个今天的小任务吧~</p>
+          <button id="mission-btn" class="compliment-btn">抽任务</button>
+        </div>
+        <div class="glass-card mini-game-card">
+          <h3>🎴 翻牌找爱心</h3>
+          <p class="mini-game-tip">三张牌里藏着一颗爱心，猜猜在哪？</p>
+          <div class="heart-cards" id="heart-cards">
+            <button class="heart-card" data-card="0">?</button>
+            <button class="heart-card" data-card="1">?</button>
+            <button class="heart-card" data-card="2">?</button>
+          </div>
+          <p id="heart-card-result" class="mini-game-result"></p>
+        </div>
       </div>
     </section>
 
@@ -393,6 +437,43 @@
       </div>
     </section>
 
+  </section>
+
+  <!-- ======================== Lucky 小狗网页 ======================== -->
+  <section class="tab-panel" id="panel-lucky">
+    <header class="hero dog-hero">
+      <h1 class="hero-title">🐶 Lucky 的小窝</h1>
+      <p class="hero-subtitle">一只西高地宝宝，随时准备摇尾巴陪你玩</p>
+    </header>
+
+    <section class="dog-section">
+      <div class="glass-card dog-card">
+        <div class="dog-scene" id="dog-scene" aria-label="Lucky Q版小宠物">
+          <div class="dog-pet" id="dog-pet">
+            <div class="dog-ear dog-ear-left"></div>
+            <div class="dog-ear dog-ear-right"></div>
+            <div class="dog-head">
+              <span class="dog-eye dog-eye-left"></span>
+              <span class="dog-eye dog-eye-right"></span>
+              <span class="dog-nose"></span>
+              <span class="dog-mouth"></span>
+            </div>
+            <div class="dog-body">
+              <span class="dog-tail"></span>
+              <span class="dog-paw dog-paw-left"></span>
+              <span class="dog-paw dog-paw-right"></span>
+            </div>
+          </div>
+          <div id="dog-bubble" class="dog-bubble">汪！我是 Lucky，摸摸我吧~</div>
+        </div>
+        <div class="dog-actions">
+          <button class="compliment-btn dog-action" data-action="pet">摸摸 Lucky</button>
+          <button class="compliment-btn dog-action" data-action="feed">喂小零食</button>
+          <button class="compliment-btn dog-action" data-action="play">一起玩球</button>
+        </div>
+        <p class="dog-status" id="dog-status">Lucky 正在乖乖等你互动。</p>
+      </div>
+    </section>
   </section>
 
   <!-- ===== 底部 ===== -->

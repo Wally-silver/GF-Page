@@ -665,3 +665,139 @@ body {
   .counter-label { font-size: .72rem; }
   .counter-sub { font-size: .68rem; }
 }
+
+/* ===== Theme Switcher & Theme Skins ===== */
+body[data-theme="kitty"] {
+  --theme-bg: linear-gradient(135deg, #fff0f6 0%, #ffd6e7 35%, #ffe9f1 70%, #fff7fb 100%);
+  --theme-primary: #e91e63;
+  --theme-secondary: #ff8fbd;
+  --theme-accent: #fff;
+  --theme-card: rgba(255, 255, 255, 0.62);
+}
+body[data-theme="kuromi"] {
+  --theme-bg: linear-gradient(135deg, #2a163d 0%, #6a3b92 36%, #f1b7d8 72%, #fff1f7 100%);
+  --theme-primary: #6a1b9a;
+  --theme-secondary: #d66bd6;
+  --theme-accent: #22112f;
+  --theme-card: rgba(255, 255, 255, 0.68);
+}
+body[data-theme="cinnamoroll"] {
+  --theme-bg: linear-gradient(135deg, #e7f7ff 0%, #bdeaff 36%, #fff7fd 70%, #ffffff 100%);
+  --theme-primary: #1976d2;
+  --theme-secondary: #80d8ff;
+  --theme-accent: #e1f5fe;
+  --theme-card: rgba(255, 255, 255, 0.72);
+}
+body { background: var(--theme-bg, linear-gradient(135deg, #fce4ec 0%, #f8bbd0 25%, #e1bee7 50%, #f3e5f5 75%, #fce4ec 100%)); }
+body[data-theme] .section-title,
+body[data-theme] .hero-title,
+body[data-theme] .footer,
+body[data-theme] .mood-result,
+body[data-theme] .gift-surprise-text { color: var(--theme-primary); }
+body[data-theme] .title-line.line-2,
+body[data-theme] .tab-btn.active,
+body[data-theme] .compliment-btn,
+body[data-theme] .quiz-score-fill { background: linear-gradient(135deg, var(--theme-secondary), var(--theme-primary)); }
+body[data-theme] .glass-card { background: var(--theme-card); }
+body[data-theme="kuromi"] .hero-title,
+body[data-theme="kuromi"] .section-title { text-shadow: 0 2px 12px rgba(255,255,255,.35); }
+body[data-theme="kuromi"] .star { color: #f8bbd0; }
+body[data-theme="cinnamoroll"] .star { color: #4fc3f7; }
+
+.theme-switcher {
+  position: fixed; top: 76px; right: 18px; z-index: 101;
+  display: flex; align-items: center; gap: .45rem; padding: .55rem .7rem;
+  border-radius: 999px; flex-wrap: wrap; max-width: min(92vw, 520px);
+}
+.switcher-label { font-size: .8rem; color: #8d6e63; font-weight: 700; }
+.theme-btn {
+  border: 1px solid rgba(255,255,255,.9); background: rgba(255,255,255,.55);
+  color: #6a1b9a; border-radius: 999px; padding: .35rem .65rem;
+  cursor: pointer; transition: transform .2s ease, background .2s ease;
+  font-size: .78rem; font-weight: 600;
+}
+.theme-btn:hover, .theme-btn.active { transform: translateY(-2px); background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.music-player {
+  display: flex; align-items: center; gap: .45rem; padding: .45rem;
+  border-radius: 999px;
+}
+.music-select {
+  border: none; outline: none; border-radius: 999px; padding: .55rem .7rem;
+  background: rgba(255,255,255,.72); color: #6a1b9a; font-weight: 600;
+  max-width: 128px;
+}
+.section-subtitle { text-align: center; color: #8d6e63; margin: -1rem auto 1.4rem; line-height: 1.7; }
+.beauty-gallery { border-radius: 28px; }
+
+/* ===== Envelope bugfix: keep letter above the opened flap/body ===== */
+.envelope { overflow: visible; transform-style: preserve-3d; }
+.envelope.open .envelope-flap { z-index: 0; pointer-events: none; opacity: .25; }
+.envelope.open .envelope-body { opacity: .45; }
+.envelope-letter { z-index: 5; max-height: 230px; overflow-y: auto; box-shadow: 0 8px 24px rgba(173,20,87,.16); }
+.envelope.open .envelope-letter { transform: translateY(-245px); z-index: 8; }
+
+/* ===== History Panels ===== */
+.history-panel { margin-top: 1.1rem; padding: 1rem; background: rgba(255,255,255,.38); border-radius: 18px; border: 1px dashed rgba(206,147,216,.7); }
+.history-title { font-weight: 700; color: #6a1b9a; margin-bottom: .75rem; }
+.mood-history, .wish-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .65rem; text-align: left; }
+.empty-history { display: block !important; text-align: center; color: #8d6e63; font-size: .9rem; }
+.history-record { display: flex; align-items: center; gap: .7rem; padding: .65rem .75rem; border-radius: 16px; background: rgba(255,255,255,.68); color: #6a1b9a; animation: fadeIn .35s ease; }
+.history-emoji { font-size: 1.35rem; }
+.history-record strong { display: block; font-size: .92rem; }
+.history-record small { display: block; margin-top: .15rem; color: #8d6e63; font-size: .72rem; }
+.wish-record { align-items: flex-start; }
+
+/* ===== More Mini Games ===== */
+.mini-games-section { position: relative; z-index: 2; padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+.mini-games-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+.mini-game-card { padding: 1.6rem; text-align: center; }
+.mini-game-card h3 { color: #6a1b9a; margin-bottom: .8rem; }
+.mini-game-card p { color: #8d6e63; line-height: 1.7; margin-bottom: 1rem; }
+.heart-cards { display: flex; justify-content: center; gap: .8rem; margin: 1rem 0; }
+.heart-card { width: 72px; height: 92px; border: 2px solid #f8bbd0; border-radius: 16px; background: linear-gradient(135deg,#fff,#fce4ec); color: #ad1457; font-size: 2rem; font-weight: 800; cursor: pointer; transition: transform .25s ease, box-shadow .25s ease; }
+.heart-card:hover { transform: translateY(-6px) rotate(2deg); box-shadow: 0 10px 22px rgba(233,30,99,.16); }
+.heart-card.opened { transform: rotateY(180deg); }
+.heart-card.winner { background: linear-gradient(135deg,#ffd6e7,#fff); border-color: #e91e63; }
+.mini-game-result { min-height: 1.6rem; color: #ad1457 !important; font-weight: 700; }
+
+/* ===== Lucky Dog Page ===== */
+.dog-section { position: relative; z-index: 2; padding: 1.5rem; max-width: 760px; margin: 0 auto; }
+.dog-card { padding: 2rem; text-align: center; overflow: hidden; }
+.dog-scene { min-height: 360px; border-radius: 28px; background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(224,247,250,.55)); position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; }
+.dog-scene::before { content: '☁️ ☁️'; position: absolute; top: 20px; left: 28px; font-size: 2rem; opacity: .8; }
+.dog-scene::after { content: '🦴'; position: absolute; right: 52px; bottom: 34px; font-size: 2rem; transform: rotate(-18deg); }
+.dog-pet { position: relative; width: 190px; height: 230px; cursor: pointer; animation: dogIdle 2.5s ease-in-out infinite; }
+@keyframes dogIdle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.dog-head { position: absolute; left: 24px; top: 18px; width: 142px; height: 128px; background: #fffdf8; border: 3px solid #f0e8dc; border-radius: 48% 48% 44% 44%; box-shadow: inset 0 -8px 0 rgba(245,235,220,.75); z-index: 2; }
+.dog-ear { position: absolute; top: 42px; width: 42px; height: 68px; background: #fff9ee; border: 3px solid #f0e8dc; border-radius: 55% 45% 65% 35%; z-index: 1; }
+.dog-ear-left { left: 6px; transform: rotate(-28deg); }
+.dog-ear-right { right: 6px; transform: rotate(28deg) scaleX(-1); }
+.dog-eye { position: absolute; top: 48px; width: 14px; height: 16px; background: #34251f; border-radius: 50%; }
+.dog-eye-left { left: 42px; }
+.dog-eye-right { right: 42px; }
+.dog-nose { position: absolute; left: 62px; top: 70px; width: 18px; height: 14px; background: #2f2523; border-radius: 50%; }
+.dog-mouth { position: absolute; left: 58px; top: 86px; width: 28px; height: 16px; border-bottom: 3px solid #8d6e63; border-radius: 0 0 20px 20px; }
+.dog-body { position: absolute; left: 42px; bottom: 20px; width: 108px; height: 92px; background: #fffdf8; border: 3px solid #f0e8dc; border-radius: 45% 45% 36% 36%; z-index: 1; }
+.dog-tail { position: absolute; right: -30px; top: 12px; width: 48px; height: 20px; border: 8px solid #fffdf8; border-left: none; border-bottom: none; border-radius: 0 28px 0 0; transform-origin: left center; animation: tailWag .65s ease-in-out infinite; }
+@keyframes tailWag { 0%,100%{transform:rotate(-12deg)} 50%{transform:rotate(22deg)} }
+.dog-paw { position: absolute; bottom: -9px; width: 34px; height: 24px; background: #fff9ee; border: 3px solid #f0e8dc; border-radius: 50%; }
+.dog-paw-left { left: 14px; }
+.dog-paw-right { right: 14px; }
+.dog-bubble { position: absolute; left: 50%; top: 20px; transform: translateX(-50%); padding: .75rem 1rem; border-radius: 18px 18px 18px 4px; background: rgba(255,255,255,.86); color: #6a1b9a; font-weight: 700; box-shadow: 0 8px 22px rgba(0,0,0,.08); }
+.dog-actions { display: flex; justify-content: center; gap: .8rem; flex-wrap: wrap; }
+.dog-status { color: #8d6e63; margin-top: 1rem; font-weight: 600; }
+.dog-pet.petting { animation: petBounce .65s ease; }
+.dog-pet.feeding { animation: feedSpin .75s ease; }
+.dog-pet.playing { animation: playJump .85s ease; }
+@keyframes petBounce { 0%,100%{transform:scale(1)} 35%{transform:scale(1.08) rotate(-3deg)} 70%{transform:scale(1.02) rotate(3deg)} }
+@keyframes feedSpin { 0%{transform:rotate(0)} 45%{transform:rotate(-8deg) scale(1.08)} 100%{transform:rotate(0)} }
+@keyframes playJump { 0%,100%{transform:translateY(0)} 35%{transform:translateY(-34px) rotate(-8deg)} 70%{transform:translateY(-8px) rotate(8deg)} }
+
+@media (max-width: 760px) {
+  .theme-switcher { position: static; margin: .75rem auto 0; justify-content: center; border-radius: 22px; }
+  .music-player { right: 12px; bottom: 18px; }
+  .music-select { max-width: 96px; }
+  .mini-games-grid { grid-template-columns: 1fr; }
+  .dog-scene { min-height: 320px; }
+  .dog-actions .compliment-btn { padding: .7rem 1rem; font-size: .9rem; }
+}

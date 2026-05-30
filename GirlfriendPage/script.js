@@ -164,17 +164,17 @@ const START_DATE = new Date('2026-03-26');
     {
       q: '星星女士最喜欢什么颜色？',
       options: ['粉色', '蓝色', '紫色', '白色'],
-      correct: 2,
+      correct: 0,
     },
     {
       q: '小犹太将军最爱的季节是？',
       options: ['春天', '夏天', '秋天', '冬天'],
-      correct: 0,
+      correct: 2,
     },
     {
-      q: '她最喜欢吃的甜品是？',
-      options: ['冰淇淋', '蛋糕', '巧克力', '布丁'],
-      correct: 1,
+      q: '她最爱吃的菜是？',
+      options: ['海带', '番茄炒蛋', '土豆丝', '糖醋排骨'],
+      correct: 0,
     },
   ];
 
@@ -275,17 +275,20 @@ const START_DATE = new Date('2026-03-26');
       btns.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       const mood = btn.dataset.mood;
-      resultEl.textContent = `今天星星女士的心情是：${mood} ${btn.querySelector('span').previousSibling?.textContent || '💗'}`;
+      const emoji = btn.childNodes[0].textContent.trim();
+      resultEl.textContent = `今天星星女士的心情是：${emoji} ${mood}，已经帮你记进历史啦~`;
 
-      const today = new Date().toLocaleDateString('zh-CN');
-      const existing = records.findIndex(r => r.date === today);
-      const emoji = btn.textContent.trim().replace(mood, '').trim();
+      const now = new Date();
+      const dateKey = now.toLocaleDateString('zh-CN');
+      const timeText = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const existing = records.findIndex(r => r.date === dateKey);
+      const nextRecord = { date: dateKey, time: timeText, mood, emoji };
       if (existing >= 0) {
-        records[existing] = { date: today, mood, emoji: emoji || btn.dataset.mood };
+        records[existing] = nextRecord;
       } else {
-        records.unshift({ date: today, mood, emoji: emoji || btn.dataset.mood });
+        records.unshift(nextRecord);
       }
-      if (records.length > 7) records.length = 7;
+      if (records.length > 30) records.length = 30;
       localStorage.setItem('mood_records', JSON.stringify(records));
       renderHistory();
     });
@@ -293,8 +296,14 @@ const START_DATE = new Date('2026-03-26');
 
   function renderHistory() {
     if (!historyEl) return;
+    if (!records.length) {
+      historyEl.classList.add('empty-history');
+      historyEl.textContent = '还没有打卡记录，今天先点一个心情吧~';
+      return;
+    }
+    historyEl.classList.remove('empty-history');
     historyEl.innerHTML = records
-      .map(r => `<span class="mood-record">${r.date}: ${r.mood}</span>`)
+      .map(r => `<article class="history-record"><span class="history-emoji">${r.emoji || '💗'}</span><div><strong>${r.mood}</strong><small>${r.date}${r.time ? ' ' + r.time : ''}</small></div></article>`)
       .join('');
   }
 })();
@@ -308,14 +317,20 @@ const START_DATE = new Date('2026-03-26');
   const starsContainer = document.getElementById('bottle-stars');
   if (!input || !btn) return;
 
-  const wishes = JSON.parse(localStorage.getItem('wish_bottle') || '[]');
+  const stored = JSON.parse(localStorage.getItem('wish_bottle') || '[]');
+  const wishes = stored.map(item => typeof item === 'string' ? { text: item, date: '旧愿望', time: '' } : item);
   renderWishes();
 
   btn.addEventListener('click', () => {
     const text = input.value.trim();
     if (!text) return;
-    wishes.unshift(text);
-    if (wishes.length > 10) wishes.length = 10;
+    const now = new Date();
+    wishes.unshift({
+      text,
+      date: now.toLocaleDateString('zh-CN'),
+      time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    });
+    if (wishes.length > 30) wishes.length = 30;
     localStorage.setItem('wish_bottle', JSON.stringify(wishes));
     input.value = '';
     renderWishes();
@@ -327,8 +342,16 @@ const START_DATE = new Date('2026-03-26');
   });
 
   function renderWishes() {
-    list.innerHTML = wishes.map(w => `<span class="wish-tag">✨ ${w}</span>`).join('');
-    countSpan.textContent = 6 + wishes.length;
+    if (list) {
+      if (!wishes.length) {
+        list.classList.add('empty-history');
+        list.textContent = '还没有新的愿望，写下第一个吧~';
+      } else {
+        list.classList.remove('empty-history');
+        list.innerHTML = wishes.map(w => `<article class="history-record wish-record"><span class="history-emoji">✨</span><div><strong>${escapeHTML(w.text)}</strong><small>${w.date || ''}${w.time ? ' ' + w.time : ''}</small></div></article>`).join('');
+      }
+    }
+    if (countSpan) countSpan.textContent = 6 + wishes.length;
     if (starsContainer) {
       const total = 6 + wishes.length;
       let starsHTML = '';
@@ -339,21 +362,60 @@ const START_DATE = new Date('2026-03-26');
     }
   }
 
+  function escapeHTML(text) {
+    return text.replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
+
   function animateBottle() {
     const bottle = document.getElementById('wish-bottle');
     if (!bottle) return;
-    bottle.style.transform = 'scale(1.1)';
-    setTimeout(() => { bottle.style.transform = 'scale(1)'; }, 200);
+    bottle.style.transform = 'scale(1.1) rotate(3deg)';
+    setTimeout(() => { bottle.style.transform = 'scale(1)'; }, 220);
+  }
+})();
+
+// ===== 更多小游戏 =====
+(function initMiniGames() {
+  const missionText = document.getElementById('mission-text');
+  const missionBtn = document.getElementById('mission-btn');
+  const cards = document.querySelectorAll('.heart-card');
+  const cardResult = document.getElementById('heart-card-result');
+
+  const missions = [
+    '给星星女士发一句“今天也最喜欢你”。',
+    '一起拍一张今日份可爱合照。',
+    '选一首歌循环播放，然后抱抱一分钟。',
+    '今晚睡前说三个今天开心的小瞬间。',
+    '给 Lucky 一个空气摸摸，再给她一个真抱抱。',
+  ];
+
+  if (missionBtn && missionText) {
+    missionBtn.addEventListener('click', () => {
+      missionText.textContent = missions[Math.floor(Math.random() * missions.length)];
+    });
   }
 
-  // 如果已经有愿望，初始也渲染瓶子星星
-  if (wishes.length > 0 && starsContainer) {
-    const total = 6 + wishes.length;
-    let starsHTML = '';
-    for (let i = 0; i < total; i++) {
-      starsHTML += '<span>' + (['⭐','✨','💫','🌟'][i % 4]) + '</span>';
-    }
-    starsContainer.innerHTML = starsHTML;
+  function resetCards() {
+    cards.forEach(card => {
+      card.textContent = '?';
+      card.classList.remove('opened', 'winner');
+      card.disabled = false;
+    });
+    if (cardResult) cardResult.textContent = '';
+  }
+
+  if (cards.length) {
+    let luckyCard = Math.floor(Math.random() * cards.length);
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = Number(card.dataset.card);
+        cards.forEach(c => { c.disabled = true; c.classList.add('opened'); });
+        cards.forEach((c, i) => { c.textContent = i === luckyCard ? '💖' : '🌸'; });
+        cards[luckyCard].classList.add('winner');
+        if (cardResult) cardResult.textContent = idx === luckyCard ? '猜中啦！今天也是被爱包围的一天~' : '没关系，爱心还是送给你啦~';
+        setTimeout(() => { luckyCard = Math.floor(Math.random() * cards.length); resetCards(); }, 2200);
+      });
+    });
   }
 })();
 
@@ -458,12 +520,55 @@ const START_DATE = new Date('2026-03-26');
   });
 })();
 
+// ===== 主题切换 =====
+(function initThemeSwitcher() {
+  const buttons = document.querySelectorAll('.theme-btn');
+  if (!buttons.length) return;
+  const savedTheme = localStorage.getItem('page_theme') || 'kitty';
+  setTheme(savedTheme);
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTheme(btn.dataset.theme);
+      localStorage.setItem('page_theme', btn.dataset.theme);
+    });
+  });
+
+  function setTheme(theme) {
+    document.body.dataset.theme = theme;
+    buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
+  }
+})();
+
 // ===== 音乐播放器 =====
 (function initMusic() {
   const btn = document.getElementById('music-toggle');
   const bgm = document.getElementById('bgm');
+  const select = document.getElementById('music-select');
   if (!btn || !bgm) return;
+
+  const songs = [
+    { name: '甜甜循环', src: 'assets/audio/bgm.mp3', rate: 1 },
+    { name: '星星散步', src: 'assets/audio/bgm.mp3', rate: 0.92 },
+    { name: '粉色梦境', src: 'assets/audio/bgm.mp3', rate: 0.84 },
+    { name: '云朵抱抱', src: 'assets/audio/bgm.mp3', rate: 1.08 },
+    { name: 'Lucky 摇尾巴', src: 'assets/audio/bgm.mp3', rate: 1.18 },
+  ];
+
   let playing = false;
+  let currentSong = Number(localStorage.getItem('music_song') || 0);
+  if (select) select.value = String(currentSong);
+  loadSong(currentSong);
+
+  if (select) {
+    select.addEventListener('change', () => {
+      currentSong = Number(select.value);
+      localStorage.setItem('music_song', String(currentSong));
+      const shouldPlay = playing;
+      loadSong(currentSong);
+      if (shouldPlay) playMusic();
+    });
+  }
 
   btn.addEventListener('click', () => {
     if (playing) {
@@ -472,16 +577,55 @@ const START_DATE = new Date('2026-03-26');
       btn.textContent = '🎵';
       playing = false;
     } else {
-      bgm.play().then(() => {
-        btn.classList.add('playing');
-        btn.textContent = '🎶';
-        playing = true;
-      }).catch(() => {
-        // 如果音频文件不存在，静默处理
-        btn.textContent = '🚫';
-      });
+      playMusic();
     }
   });
+
+  function loadSong(index) {
+    const song = songs[index] || songs[0];
+    bgm.src = song.src;
+    bgm.playbackRate = song.rate;
+    btn.title = `播放：${song.name}`;
+  }
+
+  function playMusic() {
+    bgm.play().then(() => {
+      btn.classList.add('playing');
+      btn.textContent = '🎶';
+      playing = true;
+    }).catch(() => {
+      btn.textContent = '🚫';
+      playing = false;
+    });
+  }
+})();
+
+// ===== Lucky 小宠物互动 =====
+(function initLuckyDog() {
+  const pet = document.getElementById('dog-pet');
+  const bubble = document.getElementById('dog-bubble');
+  const status = document.getElementById('dog-status');
+  const actions = document.querySelectorAll('.dog-action');
+  if (!pet || !actions.length) return;
+
+  const messages = {
+    pet: ['Lucky 被摸摸啦，尾巴摇成小风扇！', '汪汪~ Lucky 最喜欢温柔摸摸。'],
+    feed: ['Lucky 吃到了小零食，开心转圈圈！', '咔嚓咔嚓，小西高地宝宝充满电。'],
+    play: ['Lucky 把球叼回来啦，还想再玩一次！', 'Lucky 蹦蹦跳跳：姐姐也太会玩啦！'],
+  };
+
+  pet.addEventListener('click', () => interact('pet'));
+  actions.forEach(btn => btn.addEventListener('click', () => interact(btn.dataset.action)));
+
+  function interact(action) {
+    const pool = messages[action] || messages.pet;
+    const msg = pool[Math.floor(Math.random() * pool.length)];
+    pet.classList.remove('petting', 'feeding', 'playing');
+    void pet.offsetWidth;
+    pet.classList.add(action === 'pet' ? 'petting' : action === 'feed' ? 'feeding' : 'playing');
+    if (bubble) bubble.textContent = msg;
+    if (status) status.textContent = msg;
+  }
 })();
 
 // ===== 回到顶部 =====
@@ -510,7 +654,7 @@ const START_DATE = new Date('2026-03-26');
 
   document.addEventListener('click', e => {
     // 排除交互元素
-    if (e.target.closest('button, .envelope, .photo-frame, .quiz-option, .mood-btn, #fortune-slip')) return;
+    if (e.target.closest('button, select, .envelope, .photo-frame, .bento-item, .quiz-option, .mood-btn, #fortune-slip, #dog-pet')) return;
     const el = document.createElement('span');
     el.className = 'click-effect';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
